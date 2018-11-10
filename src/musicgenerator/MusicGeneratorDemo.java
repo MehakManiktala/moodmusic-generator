@@ -24,6 +24,7 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
     
     public MusicGeneratorDemo() {
         initComponents();
+        Generator.Initialize();
     }
 
     /**
@@ -207,57 +208,57 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         // TODO add your handling code here:
-        Generator.scr.empty();
         Generator.Emotion.setLowNegativeAffect();
+        Generator.SetTransitions();
         
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton8ActionPerformed
         // TODO add your handling code here:
-        Generator.scr.empty();
         Generator.Emotion.setDisengagement();
+        Generator.SetTransitions();
         
     }//GEN-LAST:event_jRadioButton8ActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         // TODO add your handling code here:
-        Generator.scr.empty();
         Generator.Emotion.setPleasantness();
+        Generator.SetTransitions();
         
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
         // TODO add your handling code here:
-        Generator.scr.empty();
         Generator.Emotion.setHighPositiveAffect();
+        Generator.SetTransitions();
         
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
         // TODO add your handling code here:
-        Generator.scr.empty();
         Generator.Emotion.setStrongEngagement();
+        Generator.SetTransitions();
         
     }//GEN-LAST:event_jRadioButton4ActionPerformed
 
     private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
         // TODO add your handling code here:
-        Generator.scr.empty();
         Generator.Emotion.setHighNegativeAffect();
+        Generator.SetTransitions();
         
     }//GEN-LAST:event_jRadioButton5ActionPerformed
 
     private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
         // TODO add your handling code here:
-        Generator.scr.empty();
         Generator.Emotion.setUnpleasantness();
+        Generator.SetTransitions();
         
     }//GEN-LAST:event_jRadioButton6ActionPerformed
 
     private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton7ActionPerformed
         // TODO add your handling code here:
-        Generator.scr.empty();
         Generator.Emotion.setLowPositiveAffect();
+        Generator.Initialize();
         
     }//GEN-LAST:event_jRadioButton7ActionPerformed
 
@@ -265,6 +266,7 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
         // TODO add your handling code here:
         worker.cancel(true);
         Generator.scr.empty();
+        Generator.Initialize();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

@@ -22,14 +22,70 @@ public class MusicGenerator {
      
     EmotionHandler Emotion = new EmotionHandler();
     Score scr = new Score();
-    
-    boolean stopPlay = false;
      
     static double[] ValMap = {JMC.QUAVER, JMC.CROTCHET, JMC.MINIM ,JMC.SEMIBREVE};
     static int[] OctMap = {0,12};
-     
+
+	private Random randnum;
+
+	private MarkovChain noteMC;
+
+	private MarkovChain octMC;
+
+	private MarkovChain valMC;
+
+	private MarkovChain chordMC;
+
+	private MidiHandler melody;
+
+	private MidiHandler chordRoot;
+
+	private MidiHandler chordMid;
+
+	private MidiHandler chordDom;
+    
+	public boolean populated = false;
+	
+    
+    public void Initialize() {
+    	
+    	populated = false;
+    	
+        randnum = new Random();
+        noteMC = new MarkovChain();
+        octMC = new MarkovChain();
+        valMC = new MarkovChain();
+        chordMC = new MarkovChain();
+        
+        
+        noteMC.states = 7;
+        noteMC.curState = 1;
+        
+        octMC.states = 2;
+        octMC.curState = 1;
+       
+        valMC.states = 4;
+        valMC.curState = 1;
+        
+        chordMC.states = 7;
+        chordMC.curState = 1;
+        
+        melody = new MidiHandler();
+        chordRoot = new MidiHandler();
+        chordMid = new MidiHandler();
+        chordDom = new MidiHandler();
+    }
+    
+    public void SetTransitions() {
+        noteMC.transition = map[randnum.nextInt(6)];
+        octMC.transition = Emotion.OctMC;
+        valMC.transition = Emotion.ValueMC;
+        chordMC.transition = Emotion.ChordMC;
+    }
+    
     public void Generate() {
         
+    	scr.setTitle(randnum.nextLong()+"");
         //initialize MIDI
         //ask for mood input
         //read mood input
@@ -39,47 +95,20 @@ public class MusicGenerator {
         //Play
         
         
-        Random randnum =  new Random();
-        MarkovChain NoteMC = new MarkovChain();
-        MarkovChain OctMC = new MarkovChain();
-        MarkovChain ValMC = new MarkovChain();
-        MarkovChain ChordMC = new MarkovChain();
-        int transposer = randnum.nextInt(12) + 1;
-        
-        
-        NoteMC.transition = map[randnum.nextInt(6)];
-        NoteMC.states = 7;
-        NoteMC.curState = 1;
-        
-        OctMC.transition = Emotion.OctMC;
-        OctMC.states = 2;
-        OctMC.curState = 1;
-       
-        ValMC.transition = Emotion.ValueMC;
-        ValMC.states = 4;
-        ValMC.curState = 1;
-        
-        ChordMC.transition = Emotion.ChordMC;
-        ChordMC.states = 7;
-        ChordMC.curState = 1;
-        
-        MidiHandler Melody = new MidiHandler();
-        MidiHandler chordRoot = new MidiHandler();
-        MidiHandler chordMid = new MidiHandler();
-        MidiHandler chordDom = new MidiHandler();
+
         
         int crCounter = 0;
         int cmCounter = 0;
         int cdCounter = 0;
         int mCounter = 0;
         
-            for(int i=0;i<1200;i++){
+            for(int i=0;i<4;i++){
                 if (i % 8 == 0){
-                    ChordMC.nextState();
+                    chordMC.nextState();
                 //System.out.println(map[ChordMC.curState - 1]);
-                NoteMC.transition = map[ChordMC.curState - 1];
-                System.out.println("Chord State = " + ChordMC.curState);
-                OctMC.nextState();
+                noteMC.transition = map[chordMC.curState - 1];
+                System.out.println("Chord State = " + chordMC.curState);
+                octMC.nextState();
                 }
                 //initialize chord notes
                 Note cRoot = new Note();
@@ -87,11 +116,11 @@ public class MusicGenerator {
                 Note cDom = new Note();
                 //setting the note pitch for each chord note
                 if(crCounter == 0){
-                    cRoot.setPitch(Emotion.emoMap[ChordMC.curState - 1] - 12);
+                    cRoot.setPitch(Emotion.emoMap[chordMC.curState - 1] - 12);
                     System.out.println("cRoot pitch: " + cRoot.getPitch());
-                    ValMC.nextState();
-                    cRoot.setLength(ValMap[ValMC.curState - 1]);
-                    switch (ValMC.curState) {
+                    valMC.nextState();
+                    cRoot.setLength(ValMap[valMC.curState - 1]);
+                    switch (valMC.curState) {
                         case 1 : crCounter = 1;
                                  break;
                         case 2 : crCounter = 2;
@@ -105,12 +134,12 @@ public class MusicGenerator {
                     chordRoot.phrase.addNote(cRoot);
                 }
                 if (cmCounter == 0){
-                    if(ChordMC.curState == 1 || ChordMC.curState == 4 || ChordMC.curState == 5){                
-                        cMid.setPitch(Emotion.emoMap[ChordMC.curState - 1] - 8);
+                    if(chordMC.curState == 1 || chordMC.curState == 4 || chordMC.curState == 5){                
+                        cMid.setPitch(Emotion.emoMap[chordMC.curState - 1] - 8);
                         System.out.println("cMid pitch: " + cMid.getPitch());
-                        ValMC.nextState();
-                        cMid.setLength(ValMap[ValMC.curState - 1]);
-                        switch (ValMC.curState) {
+                        valMC.nextState();
+                        cMid.setLength(ValMap[valMC.curState - 1]);
+                        switch (valMC.curState) {
                             case 1 : cmCounter = 1;
                                      break;
                             case 2 : cmCounter = 2;
@@ -121,12 +150,12 @@ public class MusicGenerator {
                                      break;
                         }
                     }
-                    else if(ChordMC.curState == 2 || ChordMC.curState == 3 || ChordMC.curState == 6 || ChordMC.curState == 7){                
-                        cMid.setPitch(Emotion.emoMap[ChordMC.curState - 1] - 9);
+                    else if(chordMC.curState == 2 || chordMC.curState == 3 || chordMC.curState == 6 || chordMC.curState == 7){                
+                        cMid.setPitch(Emotion.emoMap[chordMC.curState - 1] - 9);
                         System.out.println("cMid pitch: " + cMid.getPitch());
-                        ValMC.nextState();
-                        cMid.setLength(ValMap[ValMC.curState - 1]);
-                        switch (ValMC.curState) {
+                        valMC.nextState();
+                        cMid.setLength(ValMap[valMC.curState - 1]);
+                        switch (valMC.curState) {
                             case 1 : cmCounter = 1;
                                      break;
                             case 2 : cmCounter = 2;
@@ -140,12 +169,12 @@ public class MusicGenerator {
                    chordMid.phrase.addNote(cMid);
                 }
                 if (cdCounter == 0){
-                    if(ChordMC.curState == 7){
-                        cDom.setPitch(Emotion.emoMap[ChordMC.curState - 1] - 6);
+                    if(chordMC.curState == 7){
+                        cDom.setPitch(Emotion.emoMap[chordMC.curState - 1] - 6);
                         System.out.println("cDom pitch: " + cDom.getPitch());
-                        ValMC.nextState();
-                        cDom.setLength(ValMap[ValMC.curState - 1]);
-                        switch (ValMC.curState) {
+                        valMC.nextState();
+                        cDom.setLength(ValMap[valMC.curState - 1]);
+                        switch (valMC.curState) {
                             case 1 : cdCounter = 1;
                                      break;
                             case 2 : cdCounter = 2;
@@ -158,11 +187,11 @@ public class MusicGenerator {
                         
                     }
                     else{
-                        cDom.setPitch(Emotion.emoMap[ChordMC.curState - 1] - 5);
+                        cDom.setPitch(Emotion.emoMap[chordMC.curState - 1] - 5);
                         System.out.println("cDom pitch: " + cDom.getPitch());
-                        ValMC.nextState();
-                        cDom.setLength(ValMap[ValMC.curState - 1]);
-                        switch (ValMC.curState) {
+                        valMC.nextState();
+                        cDom.setLength(ValMap[valMC.curState - 1]);
+                        switch (valMC.curState) {
                             case 1 : cdCounter = 1;
                                      break;
                             case 2 : cdCounter = 2;
@@ -183,14 +212,14 @@ public class MusicGenerator {
                 //adding the chord to the part
                // Chord.part.addCPhrase(ChordN);
                if (mCounter == 0){
-                    NoteMC.nextState();
+                    noteMC.nextState();
                     //System.out.println("Note state = " + NoteMC.curState);
-                    ValMC.nextState();
+                    valMC.nextState();
                     Note n = new Note();
                    
-                    n.setPitch(Emotion.emoMap[NoteMC.curState - 1] + OctMap[OctMC.curState - 1]);
+                    n.setPitch(Emotion.emoMap[noteMC.curState - 1] + OctMap[octMC.curState - 1]);
                     System.out.println("melod pitch: " + n.getPitch());
-                    n.setLength(ValMap[ValMC.curState - 1]);
+                    n.setLength(ValMap[valMC.curState - 1]);
                     if (((cRoot.getPitch() == (n.getPitch()) + 2) || (cRoot.getPitch() == (n.getPitch()) - 2))){
                         n.setPitch(n.getPitch() + 2);
                         System.out.println("dissonance detected");
@@ -203,7 +232,7 @@ public class MusicGenerator {
                         n.setPitch(n.getPitch() + 2);
                         System.out.println("dissonance detected");
                     }
-                    switch (ValMC.curState) {
+                    switch (valMC.curState) {
                         case 1 : mCounter = 1;
                                  break;
                         case 2 : mCounter = 2;
@@ -214,22 +243,27 @@ public class MusicGenerator {
                                  break;
                     }
                     //System.out.println(n.getPitch());
-                    Melody.phrase.addNote(n);
+                    melody.phrase.addNote(n);
                     }
                 crCounter--;
                 cmCounter--;
                 cdCounter--;
                 mCounter--;
             }
-            Melody.part.addPhrase(Melody.phrase);
-            chordRoot.part.addPhrase(chordRoot.phrase);
-            chordMid.part.addPhrase(chordMid.phrase);
-            chordDom.part.addPhrase (chordDom.phrase);
-            scr.addPart(Melody.part);
-            scr.addPart(chordRoot.part);
-            scr.addPart(chordMid.part);
-            scr.addPart(chordDom.part);
-            scr.setTempo(Emotion.emoTempo);
+            
+            if (!populated) {
+	            melody.part.addPhrase(melody.phrase);
+	            chordRoot.part.addPhrase(chordRoot.phrase);
+	            chordMid.part.addPhrase(chordMid.phrase);
+	            chordDom.part.addPhrase (chordDom.phrase);
+	            scr.addPart(melody.part);
+	            scr.addPart(chordRoot.part);
+	            scr.addPart(chordMid.part);
+	            scr.addPart(chordDom.part);
+	            scr.setTempo(Emotion.emoTempo);
+	            populated = true;
+            }
+            int transposer = randnum.nextInt(12) + 1;
             Mod.transpose(scr, transposer);
             
        }
