@@ -5,12 +5,12 @@
  */
 package musicgenerator;
 
-import jm.JMC;
-import jm.music.data.*;
-import jm.midi.*;
-import jm.util.*;
-import jm.music.tools.Mod;
 import java.util.Random;
+
+import jm.JMC;
+import jm.music.data.Note;
+import jm.music.data.Score;
+import jm.music.tools.Mod;
 /**
  *
  * @author user
@@ -45,7 +45,6 @@ public class MusicGenerator {
         MarkovChain ValMC = new MarkovChain();
         MarkovChain ChordMC = new MarkovChain();
         int transposer = randnum.nextInt(12) + 1;
-        int chordRandomizer = 1;
         
         
         NoteMC.transition = map[randnum.nextInt(6)];
@@ -65,7 +64,6 @@ public class MusicGenerator {
         ChordMC.curState = 1;
         
         MidiHandler Melody = new MidiHandler();
-        MidiHandler Chord =  new MidiHandler();
         MidiHandler chordRoot = new MidiHandler();
         MidiHandler chordMid = new MidiHandler();
         MidiHandler chordDom = new MidiHandler();
