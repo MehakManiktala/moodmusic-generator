@@ -4,8 +4,7 @@
  * and open the template in the editor.
  */
 package musicgenerator;
-import java.lang.Math;
-import java.util.*;
+
 /**
  *
  * @author user

@@ -7,10 +7,8 @@
 
 package musicgenerator;
 
-import jm.JMC;
-import jm.music.data.*;
-import jm.midi.*;
-import jm.util.*;
+import jm.music.data.Part;
+import jm.music.data.Phrase;
 /**
  *
  * @author user
