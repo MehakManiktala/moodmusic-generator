@@ -29,178 +29,178 @@ import javax.swing.text.Highlighter.HighlightPainter;
 
 import jm.util.Play;
 import musicgenerator.MusicGenerator;
-	
+
 @SuppressWarnings("serial")
 public class SentencePlayer extends javax.swing.JFrame  {
-	
+
 	private static final String TERMINATION = "$T3RMN@+N$";
-	
-    private static WatchService watcher;
-    MusicGenerator Generator = new MusicGenerator();
-    private SwingWorker<Void,String> worker;
-    
-    //UI Components
-    private JTextArea textArea;
-    private Highlighter highlighter;
-    HighlightPainter painter;
-    private StringBuilder inputString;
-    private List<MoodSentence> sentenceBuffer = new LinkedList<MoodSentence>();
-    private boolean terminationSwitch = false;
-    
-    public static enum Mood{
-    	Sad,
-    	Happy,
-    	Surprised,
-    	Neutral
-    }
-    private static class MoodSentence{
-    	
-    	public MoodSentence(String st, String mood, int start, int end) {
-    		
-    		this.sentence = st;
-    		
-    		mood = mood.toLowerCase();
-    		for (Mood m : Mood.values()) {
-    			if (mood.equals(m.name().toLowerCase())) {
-    				this.mood = m;
-    				break;
-    			}
-    		}
+
+	private static WatchService watcher;
+	MusicGenerator Generator = new MusicGenerator();
+	private SwingWorker<Void,String> worker;
+
+	//UI Components
+	private JTextArea textArea;
+	private Highlighter highlighter;
+	HighlightPainter painter;
+	private StringBuilder inputString;
+	private List<MoodSentence> sentenceBuffer = new LinkedList<MoodSentence>();
+	private boolean terminationSwitch = false;
+
+	public static enum Mood{
+		Sad,
+		Happy,
+		Surprised,
+		Neutral
+	}
+	private static class MoodSentence{
+
+		public MoodSentence(String st, String mood, int start, int end) {
+
+			this.sentence = st;
+
+			mood = mood.toLowerCase();
+			for (Mood m : Mood.values()) {
+				if (mood.equals(m.name().toLowerCase())) {
+					this.mood = m;
+					break;
+				}
+			}
 		}
-    	
+
 		public String sentence = "";
-    	public Mood mood = Mood.Neutral;
-    	public int startIndex = 0;
-    	public int endIndex = 0;
-    }
-    
-    private void initComponents() {
+		public Mood mood = Mood.Neutral;
+		public int startIndex = 0;
+		public int endIndex = 0;
+	}
 
-        textArea = new JTextArea(10, 30);
+	private void initComponents() {
 
-        String text = "No sentences found.";
+		textArea = new JTextArea(10, 30);
 
-        textArea.setText(text);
+		String text = "No sentences found.";
 
-        highlighter = textArea.getHighlighter();
-        painter = new DefaultHighlighter.DefaultHighlightPainter(Color.pink);
+		textArea.setText(text);
 
-    }
+		highlighter = textArea.getHighlighter();
+		painter = new DefaultHighlighter.DefaultHighlightPainter(Color.pink);
 
-    void Stop(){
-        // TODO add your handling code here:
-        worker.cancel(true);
-        Generator.scr.empty();
-    }
+	}
 
-    void Start() {
-        // TODO add your handling code here:
-    
-        worker = new SwingWorker<Void, String>(){
-            @Override
-            protected Void doInBackground() throws Exception {
-                Generator.scr.empty();
-                Generator.Generate();
-                Play.midi(Generator.scr);
-                return null;
-            }
-        };
-        worker.execute();
-    }
-    
-    void SetEmotion(String mood) {
-    	//TODO
-    }
-    
+	void Stop(){
+		// TODO add your handling code here:
+		worker.cancel(true);
+		Generator.scr.empty();
+	}
+
+	void Start() {
+		// TODO add your handling code here:
+
+		worker = new SwingWorker<Void, String>(){
+			@Override
+			protected Void doInBackground() throws Exception {
+				Generator.scr.empty();
+				Generator.Generate();
+				Play.midi(Generator.scr);
+				return null;
+			}
+		};
+		worker.execute();
+	}
+
+	void SetEmotion(String mood) {
+		//TODO
+	}
+
 	public static void main(String[]args) {
 		System.out.println("Running");
-		
+
 		SentencePlayer player = new SentencePlayer();
 		player.initComponents();
-	    
+
 		String path = System.getProperty("user.dir");
 		if (args.length > 0) {
 			if (args[0]!=null)
 				path = args[0];
 		}
 		System.out.println("Attempting to watch directory "+path);
-        try {
+		try {
 			watcher = FileSystems.getDefault().newWatchService();
-	        Path dir = Paths.get(path);
-	        WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);//, ENTRY_MODIFY);
+			Path dir = Paths.get(path);
+			WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);//, ENTRY_MODIFY);
 			System.out.print("Watching directory "+dir.toAbsolutePath().toString());
-	        player.inputString = new StringBuilder();
-	        //put poller in new thread called mood-change reader
-	        new Thread(new Runnable() {
+			player.inputString = new StringBuilder();
+			//put poller in new thread called mood-change reader
+			new Thread(new Runnable() {
 
 				@Override
 				public void run() {
 					//run until termination sentence is found
-			        while(player.terminationSwitch==false){
-			        	
-			            for (WatchEvent<?> event: key.pollEvents()) {
-			                WatchEvent.Kind<?> kind = event.kind();
-			                if (kind == OVERFLOW) {
-			                    continue;
-			                }
-			                @SuppressWarnings("unchecked")
+					while(player.terminationSwitch==false){
+
+						for (WatchEvent<?> event: key.pollEvents()) {
+							WatchEvent.Kind<?> kind = event.kind();
+							if (kind == OVERFLOW) {
+								continue;
+							}
+							@SuppressWarnings("unchecked")
 							WatchEvent<Path> ev = (WatchEvent<Path>)event;
-			                Path filename = ev.context();
-			            	//change mood
-			            	File file = new File(filename.toAbsolutePath().toString()); 
-			            	System.out.println("New changes spotted in "+file.getAbsolutePath());
-			            	  
-			            	  BufferedReader br;
+							Path filename = ev.context();
+							//change mood
+							File file = new File(filename.toAbsolutePath().toString()); 
+							System.out.println("New changes spotted in "+file.getAbsolutePath());
+
+							BufferedReader br;
 							try {
 								br = new BufferedReader(new FileReader(file));
-				            	  String st; 
-				            	  while ((st = br.readLine()) != null) {
-				            		  if (st.equals(TERMINATION)) {
-				            			  player.terminationSwitch = true;
-				            			  break;
-				            		  }
-				            		  String mood = "Neutral";//TODO parse mood
-				            		  player.sentenceBuffer.add(new MoodSentence(st, mood, player.inputString.length(), player.inputString.length()+st.length()-1));
-					            	  player.inputString.append(st);
-				            		  System.out.println(st); 
+								String st; 
+								while ((st = br.readLine()) != null) {
+									if (st.equals(TERMINATION)) {
+										player.terminationSwitch = true;
+										break;
+									}
+									String mood = "Neutral";//TODO parse mood
+									player.sentenceBuffer.add(new MoodSentence(st, mood, player.inputString.length(), player.inputString.length()+st.length()-1));
+									player.inputString.append(st);
+									System.out.println(st); 
 
-				            	  try {
-					          			player.highlighter.addHighlight(0, player.inputString.length(), player.painter );
-					          		} catch (BadLocationException e) {
-					          			e.printStackTrace();
-					          		}
-				            	  
+									try {
+										player.highlighter.addHighlight(0, player.inputString.length(), player.painter );
+									} catch (BadLocationException e) {
+										e.printStackTrace();
+									}
 
-				            	  }
-				            	  player.textArea.setText(player.inputString.toString());
 
-				                  
+								}
+								player.textArea.setText(player.inputString.toString());
+
+
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} 
-			            	  
-			            }
-			        }
-			        //TODO close GUI
-					
+
+						}
+					}
+					//TODO close GUI
+
 				}
-	        }, "mood-change reader").start();
-	        SwingWorker<Void, String> worker = new SwingWorker<Void, String>(){
-	            @Override
-	            protected Void doInBackground() throws Exception {
-	    	        JOptionPane.showMessageDialog(null, new JScrollPane(player.textArea));  
-	                return null;
-	            }
-	        };
-	        worker.execute();
-	        
+			}, "mood-change reader").start();
+			SwingWorker<Void, String> worker = new SwingWorker<Void, String>(){
+				@Override
+				protected Void doInBackground() throws Exception {
+					JOptionPane.showMessageDialog(null, new JScrollPane(player.textArea));  
+					return null;
+				}
+			};
+			worker.execute();
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
-        
+
+
 	}
 
 }
