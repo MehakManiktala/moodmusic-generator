@@ -15,6 +15,8 @@ import java.nio.file.Paths;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -31,6 +33,8 @@ import musicgenerator.MusicGenerator;
 @SuppressWarnings("serial")
 public class SentencePlayer extends javax.swing.JFrame  {
 	
+	private static final String TERMINATION = "$T3RMN@+N$";
+	
     private static WatchService watcher;
     MusicGenerator Generator = new MusicGenerator();
     private SwingWorker<Void,String> worker;
@@ -40,24 +44,46 @@ public class SentencePlayer extends javax.swing.JFrame  {
     private Highlighter highlighter;
     HighlightPainter painter;
     private StringBuilder inputString;
+    private List<MoodSentence> sentenceBuffer = new LinkedList<MoodSentence>();
+    private boolean terminationSwitch = false;
+    
+    public static enum Mood{
+    	Sad,
+    	Happy,
+    	Surprised,
+    	Neutral
+    }
+    private static class MoodSentence{
+    	
+    	public MoodSentence(String st, String mood, int start, int end) {
+    		
+    		this.sentence = st;
+    		
+    		mood = mood.toLowerCase();
+    		for (Mood m : Mood.values()) {
+    			if (mood.equals(m.name().toLowerCase())) {
+    				this.mood = m;
+    				break;
+    			}
+    		}
+		}
+    	
+		public String sentence = "";
+    	public Mood mood = Mood.Neutral;
+    	public int startIndex = 0;
+    	public int endIndex = 0;
+    }
     
     private void initComponents() {
 
         textArea = new JTextArea(10, 30);
 
-        String text = "hello world. How are you?";
+        String text = "No sentences found.";
 
         textArea.setText(text);
 
         highlighter = textArea.getHighlighter();
         painter = new DefaultHighlighter.DefaultHighlightPainter(Color.pink);
-        int p0 = text.indexOf("world");
-        int p1 = p0 + "world".length();
-        try {
-			highlighter.addHighlight(p0, p1, painter );
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
 
     }
 
@@ -109,7 +135,9 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 				@Override
 				public void run() {
-			        while(true){
+					//run until termination sentence is found
+			        while(player.terminationSwitch==false){
+			        	
 			            for (WatchEvent<?> event: key.pollEvents()) {
 			                WatchEvent.Kind<?> kind = event.kind();
 			                if (kind == OVERFLOW) {
@@ -127,14 +155,20 @@ public class SentencePlayer extends javax.swing.JFrame  {
 								br = new BufferedReader(new FileReader(file));
 				            	  String st; 
 				            	  while ((st = br.readLine()) != null) {
-				            	    System.out.println(st); 
+				            		  if (st.equals(TERMINATION)) {
+				            			  player.terminationSwitch = true;
+				            			  break;
+				            		  }
+				            		  String mood = "Neutral";//TODO parse mood
+				            		  player.sentenceBuffer.add(new MoodSentence(st, mood, player.inputString.length(), player.inputString.length()+st.length()-1));
+					            	  player.inputString.append(st);
+				            		  System.out.println(st); 
 
 				            	  try {
 					          			player.highlighter.addHighlight(0, player.inputString.length(), player.painter );
 					          		} catch (BadLocationException e) {
 					          			e.printStackTrace();
 					          		}
-				            	  player.inputString.append(st);
 				            	  
 
 				            	  }
@@ -148,6 +182,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			            	  
 			            }
 			        }
+			        //TODO close GUI
 					
 				}
 	        }, "mood-change reader").start();
