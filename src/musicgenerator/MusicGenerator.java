@@ -21,7 +21,7 @@ public class MusicGenerator {
     static double[][][] map = {MidiHandler.Maj1,MidiHandler.Min2,MidiHandler.Min3,MidiHandler.Maj4,MidiHandler.Maj5,MidiHandler.Min6,MidiHandler.Dim7};
      
     EmotionHandler Emotion = new EmotionHandler();
-    Score scr = new Score();
+    public Score scr = new Score();
     
     boolean stopPlay = false;
      
