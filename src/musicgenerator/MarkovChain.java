@@ -5,6 +5,7 @@
  */
 package musicgenerator;
 import java.lang.Math;
+
 /**
  *
  * @author user
