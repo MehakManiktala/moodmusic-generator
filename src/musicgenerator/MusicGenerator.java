@@ -22,8 +22,6 @@ public class MusicGenerator {
      
     public EmotionHandler Emotion = new EmotionHandler();
     public Score scr = new Score();
-    
-    boolean stopPlay = false;
      
     static double[] ValMap = {JMC.QUAVER, JMC.CROTCHET, JMC.MINIM ,JMC.SEMIBREVE};
     static int[] OctMap = {0,12};
