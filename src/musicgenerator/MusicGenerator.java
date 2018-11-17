@@ -20,7 +20,7 @@ public class MusicGenerator {
     
     static double[][][] map = {MidiHandler.Maj1,MidiHandler.Min2,MidiHandler.Min3,MidiHandler.Maj4,MidiHandler.Maj5,MidiHandler.Min6,MidiHandler.Dim7};
      
-    EmotionHandler Emotion = new EmotionHandler();
+    public EmotionHandler Emotion = new EmotionHandler();
     public Score scr = new Score();
     
     boolean stopPlay = false;
@@ -28,7 +28,7 @@ public class MusicGenerator {
     static double[] ValMap = {JMC.QUAVER, JMC.CROTCHET, JMC.MINIM ,JMC.SEMIBREVE};
     static int[] OctMap = {0,12};
      
-    public void Generate() {
+    public void Generate(int beats) {
         
         //initialize MIDI
         //ask for mood input
@@ -73,7 +73,7 @@ public class MusicGenerator {
         int cdCounter = 0;
         int mCounter = 0;
         
-            for(int i=0;i<1200;i++){
+            for(int i=0;i<beats;i++){
                 if (i % 8 == 0){
                     ChordMC.nextState();
                 //System.out.println(map[ChordMC.curState - 1]);

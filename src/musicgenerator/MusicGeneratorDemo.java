@@ -274,7 +274,7 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
             @Override
             protected Void doInBackground() throws Exception {
                 Generator.scr.empty();
-                Generator.Generate();
+                Generator.Generate(120);
                 Play.midi(Generator.scr);
                 return null;
             }

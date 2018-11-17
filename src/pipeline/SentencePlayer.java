@@ -36,7 +36,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	private static final String TERMINATION = "$T3RMN@+N$";
 
 	private static WatchService watcher;
-	MusicGenerator Generator = new MusicGenerator();
+	MusicGenerator musicGen = new MusicGenerator();
 	private SwingWorker<Void,String> worker;
 
 	//UI Components
@@ -90,7 +90,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	void Stop(){
 		// TODO add your handling code here:
 		worker.cancel(true);
-		Generator.scr.empty();
+		musicGen.scr.empty();
 	}
 
 	void Start() {
@@ -99,9 +99,9 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		worker = new SwingWorker<Void, String>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				Generator.scr.empty();
-				Generator.Generate();
-				Play.midi(Generator.scr);
+				musicGen.scr.empty();
+				musicGen.Generate(40);
+				Play.midi(musicGen.scr);
 				return null;
 			}
 		};
@@ -186,14 +186,21 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 				}
 			}, "mood-change reader").start();
-			SwingWorker<Void, String> worker = new SwingWorker<Void, String>(){
+			new SwingWorker<Void, String>(){
 				@Override
 				protected Void doInBackground() throws Exception {
 					JOptionPane.showMessageDialog(null, new JScrollPane(player.textArea));  
 					return null;
 				}
-			};
-			worker.execute();
+			}.execute();
+			
+			new SwingWorker<Void, String>(){
+				@Override
+				protected Void doInBackground() throws Exception {
+					player.musicGen.Generate(40);
+					return null;
+				}
+			}.execute();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
