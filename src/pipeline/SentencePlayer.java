@@ -48,10 +48,15 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	private boolean terminationSwitch = false;
 
 	public static enum Mood{
-		Sad,
-		Happy,
-		Surprised,
-		Neutral
+		Sad(1.5),
+		Happy(.7),
+		Surprised(.4),
+		Neutral(1);
+		
+	   double multiplier;
+	   Mood(double m) {
+	      multiplier = m;
+	   }
 	}
 	private static class MoodSentence{
 
@@ -209,5 +214,10 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 
 	}
-
+	int determineDuration(MoodSentence sentence){
+		
+		int duration = sentence.sentence.length();
+		duration*= sentence.mood.multiplier;
+		return duration;
+	}
 }
