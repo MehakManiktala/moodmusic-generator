@@ -29,6 +29,7 @@ import javax.swing.text.Highlighter.HighlightPainter;
 
 import jm.util.Play;
 import musicgenerator.MusicGenerator;
+import musicgenerator.MusicGeneratorDemoMinimal;
 
 @SuppressWarnings("serial")
 public class SentencePlayer extends javax.swing.JFrame  {
@@ -123,24 +124,25 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		SentencePlayer player = new SentencePlayer();
 		player.initComponents();
 
-		String path = System.getProperty("user.dir");
+		String path = null;
 		if (args.length > 0) {
 			if (args[0]!=null)
 				path = args[0];
 		}
-		System.out.println("Attempting to watch directory "+path);
-		try {
-			watcher = FileSystems.getDefault().newWatchService();
-			Path dir = Paths.get(path);
-			WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);//, ENTRY_MODIFY);
-			System.out.print("Watching directory "+dir.toAbsolutePath().toString());
-			player.inputString = new StringBuilder();
-			//put poller in new thread called mood-change reader
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-					//run until termination sentence is found
+		final String fpath = path!=null? path: System.getProperty("user.dir");
+		
+		//File-change-watcher thread
+		new SwingWorker<Void, String>(){
+			@Override
+			protected Void doInBackground() throws Exception {
+				System.out.println("Attempting to watch directory "+fpath);
+				try {
+					watcher = FileSystems.getDefault().newWatchService();
+					Path dir = Paths.get(fpath);
+					WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);//, ENTRY_MODIFY);
+					System.out.print("Watching directory "+dir.toAbsolutePath().toString());
+					player.inputString = new StringBuilder();
+					//put poller in new thread called mood-change reader
 					while(player.terminationSwitch==false){
 
 						for (WatchEvent<?> event: key.pollEvents()) {
@@ -151,7 +153,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 							@SuppressWarnings("unchecked")
 							WatchEvent<Path> ev = (WatchEvent<Path>)event;
 							Path filename = ev.context();
-							//change mood
 							File file = new File(filename.toAbsolutePath().toString()); 
 							System.out.println("New changes spotted in "+file.getAbsolutePath());
 
@@ -187,30 +188,38 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 						}
 					}
-					//TODO close GUI
 
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			}, "mood-change reader").start();
-			new SwingWorker<Void, String>(){
-				@Override
-				protected Void doInBackground() throws Exception {
-					JOptionPane.showMessageDialog(null, new JScrollPane(player.textArea));  
-					return null;
-				}
-			}.execute();
-			
-			new SwingWorker<Void, String>(){
-				@Override
-				protected Void doInBackground() throws Exception {
-					player.musicGen.Generate(40);
-					return null;
-				}
-			}.execute();
+				return null;
+			}
+		}.execute();
+		
+		//UI thread
+		new SwingWorker<Void, String>(){
+			@Override
+			protected Void doInBackground() throws Exception {
+				JOptionPane.showMessageDialog(null, new JScrollPane(player.textArea));  
+				return null;
+			}
+		}.execute();
+		
+		//Music player thread
+		new SwingWorker<Void, String>(){
+			@Override
+			protected Void doInBackground() throws Exception {
 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+				player.musicGen.scr.empty();
+                player.musicGen.Emotion.setLowNegativeAffect();
+                player.musicGen.scr.empty();
+                player.musicGen.Generate(120);
+                Play.midi(player.musicGen.scr);
+				return null;
+			}
+		}.execute();
+
 
 
 	}
