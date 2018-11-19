@@ -29,7 +29,6 @@ import javax.swing.text.Highlighter.HighlightPainter;
 
 import jm.util.Play;
 import musicgenerator.MusicGenerator;
-import musicgenerator.MusicGeneratorDemoMinimal;
 
 @SuppressWarnings("serial")
 public class SentencePlayer extends javax.swing.JFrame  {
