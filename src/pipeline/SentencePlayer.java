@@ -27,8 +27,11 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
-import jm.util.Play;
-import musicgenerator.MusicGenerator;
+import inst.FractalInst;
+import inst.SimpleFMInst;
+import jm.audio.Instrument;
+import jm.audio.RTMixer;
+import musicgenerator.RTMusicGenerator;
 
 @SuppressWarnings("serial")
 public class SentencePlayer extends javax.swing.JFrame  {
@@ -36,7 +39,11 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	private static final String TERMINATION = "$T3RMN@+N$";
 
 	private static WatchService watcher;
-	MusicGenerator musicGen = new MusicGenerator();
+
+	Instrument piano = new FractalInst(30);
+	Instrument[] instruments = new Instrument[] {piano};
+	
+	RTMusicGenerator musicGen = new RTMusicGenerator(instruments);
 	private SwingWorker<Void,String> worker;
 
 	//UI Components
@@ -92,26 +99,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 	}
 
-	void Stop(){
-		// TODO add your handling code here:
-		worker.cancel(true);
-		musicGen.scr.empty();
-	}
-
-	void Start() {
-		// TODO add your handling code here:
-
-		worker = new SwingWorker<Void, String>(){
-			@Override
-			protected Void doInBackground() throws Exception {
-				musicGen.scr.empty();
-				musicGen.Generate(40);
-				Play.midi(musicGen.scr);
-				return null;
-			}
-		};
-		worker.execute();
-	}
 
 	void SetEmotion(String mood) {
 		//TODO
@@ -128,7 +115,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			if (args[0]!=null)
 				path = args[0];
 		}
-		final String fpath = path!=null? path: System.getProperty("user.dir");
+		final String fpath = path!=null? path: System.getProperty("user.dir/inputmoods");
 		
 		//File-change-watcher thread
 		new SwingWorker<Void, String>(){
@@ -167,7 +154,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 									String mood = "Neutral";//TODO parse mood
 									player.sentenceBuffer.add(new MoodSentence(st, mood, player.inputString.length(), player.inputString.length()+st.length()-1));
 									player.inputString.append(st);
-									System.out.println(st); 
+									//System.out.println(st); 
 
 									try {
 										player.highlighter.addHighlight(0, player.inputString.length(), player.painter );
@@ -206,15 +193,18 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		}.execute();
 		
 		//Music player thread
+		int pace_duration = 5;
+		int next_index = 0;
+		Mood starting_mood = Mood.Neutral;
 		new SwingWorker<Void, String>(){
 			@Override
 			protected Void doInBackground() throws Exception {
+				
 
-				player.musicGen.scr.empty();
-                player.musicGen.Emotion.setLowNegativeAffect();
-                player.musicGen.scr.empty();
-                player.musicGen.Generate(120);
-                Play.midi(player.musicGen.scr);
+				Instrument inst = new SimpleFMInst(44100, 800, 34.4);
+				RTMusicGenerator mixer = new RTMusicGenerator(new Instrument[] {inst});
+				mixer.begin();
+				
 				return null;
 			}
 		}.execute();
