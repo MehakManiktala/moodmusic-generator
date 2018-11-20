@@ -67,11 +67,11 @@ public class RTMusicGenerator extends RTMixer {
 			public Note getNextNote() {
                 if (index % 8 == 0)
                     ChordMC.nextState();
-                Note cRoot = new Note((int)(Math.random() * 12 + 60), JMC.QN);
-                //cRoot.setPitch(Emotion.emoMap[ChordMC.curState - 1] - 12);
-                //ValMC.nextState();
-                //cRoot.setLength(ValMap[ValMC.curState - 1]);
-                //System.out.println("cDom pitch: " + cRoot.getPitch());
+                Note cRoot = new Note(0, JMC.QN);
+                cRoot.setPitch(Emotion.emoMap[ChordMC.curState - 1] - 12);
+                ValMC.nextState();
+                cRoot.setLength(ValMap[ValMC.curState - 1]);
+                System.out.println("cDom pitch: " + cRoot.getPitch());
 				return cRoot;
 			}
 			

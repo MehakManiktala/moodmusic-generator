@@ -17,6 +17,7 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -30,7 +31,7 @@ import javax.swing.text.Highlighter.HighlightPainter;
 import inst.FractalInst;
 import inst.SimpleFMInst;
 import jm.audio.Instrument;
-import jm.audio.RTMixer;
+import musicgenerator.EmotionHandler;
 import musicgenerator.RTMusicGenerator;
 
 @SuppressWarnings("serial")
@@ -44,7 +45,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	Instrument[] instruments = new Instrument[] {piano};
 	
 	RTMusicGenerator musicGen = new RTMusicGenerator(instruments);
-	private SwingWorker<Void,String> worker;
 
 	//UI Components
 	private JTextArea textArea;
@@ -58,7 +58,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		Sad(1.5),
 		Happy(.7),
 		Surprised(.4),
-		Neutral(1);
+		Neutral(1), Drowsy(2), Quiescent(1.2), Active(.5), Calm(1.3), Fear(0.6);
 		
 	   double multiplier;
 	   Mood(double m) {
@@ -67,6 +67,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	}
 	private static class MoodSentence{
 
+		@SuppressWarnings("unused")
 		public MoodSentence(String st, String mood, int start, int end) {
 
 			this.sentence = st;
@@ -78,6 +79,12 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					break;
 				}
 			}
+		}
+		
+		public MoodSentence(String st, Mood mood, int start, int end) {
+
+			this.sentence = st;
+			this.mood = mood;
 		}
 
 		public String sentence = "";
@@ -115,7 +122,11 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			if (args[0]!=null)
 				path = args[0];
 		}
-		final String fpath = path!=null? path: System.getProperty("user.dir/inputmoods");
+		final String fpath = path!=null? path: System.getProperty("user.dir")+"\\moodinput";
+		
+		Instrument inst = new SimpleFMInst(44100, 800, 34.4);
+		final RTMusicGenerator mixer = new RTMusicGenerator(new Instrument[] {inst});
+		mixer.begin();
 		
 		//File-change-watcher thread
 		new SwingWorker<Void, String>(){
@@ -151,10 +162,12 @@ public class SentencePlayer extends javax.swing.JFrame  {
 										player.terminationSwitch = true;
 										break;
 									}
-									String mood = "Neutral";//TODO parse mood
+									int mood_index = new Random().nextInt(Mood.values().length);//"Neutral";//TODO parse mood
+									Mood mood = Mood.values()[mood_index];
+									System.out.println(mood.name());
 									player.sentenceBuffer.add(new MoodSentence(st, mood, player.inputString.length(), player.inputString.length()+st.length()-1));
 									player.inputString.append(st);
-									//System.out.println(st); 
+									System.out.println(st); 
 
 									try {
 										player.highlighter.addHighlight(0, player.inputString.length(), player.painter );
@@ -200,10 +213,47 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			@Override
 			protected Void doInBackground() throws Exception {
 				
+				if (next_index >= player.sentenceBuffer.size()) {
+					Thread.sleep(pace_duration);	
+				}
+				else {
+					MoodSentence next = player.sentenceBuffer.get(next_index);
+					//TODO play mood
+					EmotionHandler emotion = player.musicGen.Emotion;
+					switch(next.mood) {
+					case Happy:
+						emotion.setPleasantness();
+						break;
+					case Neutral:
+						break;
+					case Calm:
+						emotion.setLowNegativeAffect();
+						break;
+					case Active:
+						emotion.setHighPositiveAffect();
+						break;
+					case Quiescent:
+						emotion.setDisengagement();
+						break;
+					case Surprised:
+						emotion.setStrongEngagement();
+						break;
+					case Drowsy:
+				        emotion.setLowPositiveAffect();
+				        break;
+					case Sad:
+						emotion.setUnpleasantness();
+						break;
+					case Fear:
+				        emotion.setHighNegativeAffect();
+				        break;
+					default:
+						break;
+					}
+					Thread.sleep(determineDuration(next));
+				}
+				
 
-				Instrument inst = new SimpleFMInst(44100, 800, 34.4);
-				RTMusicGenerator mixer = new RTMusicGenerator(new Instrument[] {inst});
-				mixer.begin();
 				
 				return null;
 			}
@@ -212,7 +262,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 
 	}
-	int determineDuration(MoodSentence sentence){
+	static int determineDuration(MoodSentence sentence){
 		
 		int duration = sentence.sentence.length();
 		duration*= sentence.mood.multiplier;
