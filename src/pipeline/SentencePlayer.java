@@ -31,20 +31,23 @@ import javax.swing.text.Highlighter.HighlightPainter;
 import inst.FractalInst;
 import inst.SimpleFMInst;
 import jm.audio.Instrument;
+import jm.util.Play;
 import musicgenerator.EmotionHandler;
+import musicgenerator.MusicGenerator;
 import musicgenerator.RTMusicGenerator;
 
 @SuppressWarnings("serial")
 public class SentencePlayer extends javax.swing.JFrame  {
 
 	private static final String TERMINATION = "$T3RMN@+N$";
+    private static SwingWorker<Void,String> worker;
 
 	private static WatchService watcher;
 
 	Instrument piano = new FractalInst(30);
 	Instrument[] instruments = new Instrument[] {piano};
 	
-	RTMusicGenerator musicGen = new RTMusicGenerator(instruments);
+	MusicGenerator musicGen = new MusicGenerator();
 
 	//UI Components
 	private JTextArea textArea;
@@ -93,11 +96,11 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		public int endIndex = 0;
 	}
 
-	private void initComponents() {
+	private void initComponents(String sentenceDir) {
 
 		textArea = new JTextArea(10, 30);
 
-		String text = "No sentences found.";
+		String text = "Waiting for sentences in "+sentenceDir;
 
 		textArea.setText(text);
 
@@ -115,7 +118,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		System.out.println("Running");
 
 		SentencePlayer player = new SentencePlayer();
-		player.initComponents();
 
 		String path = null;
 		if (args.length > 0) {
@@ -123,6 +125,9 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				path = args[0];
 		}
 		final String fpath = path!=null? path: System.getProperty("user.dir")+"\\moodinput";
+		
+		player.initComponents(fpath);
+
 		
 		Instrument inst = new SimpleFMInst(44100, 800, 34.4);
 		final RTMusicGenerator mixer = new RTMusicGenerator(new Instrument[] {inst});
@@ -214,11 +219,10 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			protected Void doInBackground() throws Exception {
 				
 				if (next_index >= player.sentenceBuffer.size()) {
-					Thread.sleep(pace_duration);	
+					Thread.sleep(pace_duration);
 				}
 				else {
 					MoodSentence next = player.sentenceBuffer.get(next_index);
-					//TODO play mood
 					EmotionHandler emotion = player.musicGen.Emotion;
 					switch(next.mood) {
 					case Happy:
@@ -250,6 +254,16 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					default:
 						break;
 					}
+			        if(worker!=null) worker.cancel(true);
+			        worker = new SwingWorker<Void, String>(){
+			            @Override
+			            protected Void doInBackground() throws Exception {
+			            	player.musicGen.scr.empty();
+			            	player.musicGen.Generate(120);
+			                Play.midi(player.musicGen.scr);
+			                return null;
+			            }
+			        };
 					Thread.sleep(determineDuration(next));
 				}
 				
