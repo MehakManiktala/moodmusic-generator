@@ -22,6 +22,7 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
@@ -163,12 +164,12 @@ public class SentencePlayer extends javax.swing.JFrame  {
 										player.terminationSwitch = true;
 										break;
 									}
-									int mood_index = new Random().nextInt(Mood.values().length);//"Neutral";//TODO parse mood
-									Mood mood = Mood.values()[mood_index];
-									System.out.println(mood.name());
-									player.sentenceBuffer.add(new MoodSentence(st, mood, player.inputString.length(), player.inputString.length()+st.length()-1));
-									player.inputString.append(st);
-									System.out.println(st); 
+									String[] split = st.split("#");
+									String sentence = split[0];
+									String moodString = split[1];
+									Mood mood = Mood.valueOf(moodString);
+									player.sentenceBuffer.add(new MoodSentence(sentence, mood, player.inputString.length(), player.inputString.length()+st.length()-1));
+									player.inputString.append(sentence);
 
 									try {
 										player.highlighter.addHighlight(0, player.inputString.length(), player.painter );
@@ -205,11 +206,12 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				mainFrame.setSize(400,400);
 				JPanel controlPanel= new JPanel();
 				mainFrame.add(controlPanel);
-				controlPanel.add(player.textArea);
 				player.textArea.setEditable(false);
 				player.textArea.setFont(new Font("Serif", Font.ITALIC, 16));
 				player.textArea.setLineWrap(true);
 				player.textArea.setWrapStyleWord(true);
+				JScrollPane scrollPane = new JScrollPane(player.textArea); 
+				controlPanel.add(scrollPane);
 				mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 				mainFrame.setVisible(true);  
 				return null;
@@ -218,10 +220,10 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		
 		//Music player thread
 		int pace_duration = 5;
-		int next_index = 0;
 		new SwingWorker<Void, String>(){
 			@Override
 			protected Void doInBackground() throws Exception {
+				int next_index = 0;
 				
 				//default starting mood
 				player.musicGen.Emotion.setPleasantness();
@@ -231,6 +233,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 						Thread.sleep(pace_duration);
 					}
 					MoodSentence next = player.sentenceBuffer.get(next_index);
+					next_index++;
 					EmotionHandler emotion = player.musicGen.Emotion;
 					switch(next.mood) {
 					case Happy:
