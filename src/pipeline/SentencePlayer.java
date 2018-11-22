@@ -29,12 +29,10 @@ import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
 import inst.FractalInst;
-import inst.SimpleFMInst;
 import jm.audio.Instrument;
 import jm.util.Play;
 import musicgenerator.EmotionHandler;
 import musicgenerator.MusicGenerator;
-import musicgenerator.RTMusicGenerator;
 
 @SuppressWarnings("serial")
 public class SentencePlayer extends javax.swing.JFrame  {
@@ -129,10 +127,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		player.initComponents(fpath);
 
 		
-		Instrument inst = new SimpleFMInst(44100, 800, 34.4);
-		final RTMusicGenerator mixer = new RTMusicGenerator(new Instrument[] {inst});
-		mixer.begin();
-		
 		//File-change-watcher thread
 		new SwingWorker<Void, String>(){
 			@Override
@@ -213,10 +207,12 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		//Music player thread
 		int pace_duration = 5;
 		int next_index = 0;
-		Mood starting_mood = Mood.Neutral;
 		new SwingWorker<Void, String>(){
 			@Override
 			protected Void doInBackground() throws Exception {
+				
+				//default starting mood
+				player.musicGen.Emotion.setPleasantness();
 				
 				if (next_index >= player.sentenceBuffer.size()) {
 					Thread.sleep(pace_duration);
