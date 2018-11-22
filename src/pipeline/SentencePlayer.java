@@ -134,6 +134,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			@Override
 			protected Void doInBackground() throws Exception {
 				System.out.println("Attempting to watch directory "+fpath);
+				boolean has_found_files = false;
 				try {
 					watcher = FileSystems.getDefault().newWatchService();
 					Path dir = Paths.get(fpath);
@@ -158,6 +159,13 @@ public class SentencePlayer extends javax.swing.JFrame  {
 							try {
 								br = new BufferedReader(new FileReader(file));
 								String st; 
+								
+								//remove "Watching dir" text from textarea
+								if (!has_found_files) {
+									has_found_files = true;
+									player.textArea.setText("");
+								}
+								
 								while ((st = br.readLine()) != null) {
 									if (st.equals(TERMINATION)) {
 										player.terminationSwitch = true;
@@ -239,6 +247,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					System.out.print(next.mood.name());
 					System.out.println(next.startIndex +", "+next.endIndex);
 					try {
+						player.highlighter.removeAllHighlights();
 						player.highlighter.addHighlight(next.startIndex, next.endIndex, player.painter );
 					} catch (BadLocationException e) {
 						e.printStackTrace();
