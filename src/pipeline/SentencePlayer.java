@@ -57,12 +57,12 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	private boolean terminationSwitch = false;
 
 	public static enum Mood{
-		Sad(1.5, Color.blue),
+		Sad(1.5, Color.lightGray),
 		Happy(.7, Color.pink),
 		Surprised(.4, Color.yellow),
-		Drowsy(2, Color.blue),
-		Quiescent(1.2, Color.gray),
-		Active(.5, Color.green), 
+		Drowsy(2, Color.gray),
+		Quiescent(1.2, Color.blue),
+		Active(.5, Color.orange), 
 		Calm(1.3, Color.green), 
 		Fear(0.6, Color.red);
 		
