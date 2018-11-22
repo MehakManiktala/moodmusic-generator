@@ -166,7 +166,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 									String[] split = st.split("#");
 									String sentence = split[0];
 									String moodString = split[1];
-									Mood mood = Mood.Calm;//Mood.valueOf(moodString);
+									Mood mood = Mood.valueOf(moodString);
 									player.sentenceBuffer.add(new MoodSentence(sentence, mood, previous_index, previous_index+sentence.length()-1));
 									previous_index += sentence.length();
 
