@@ -5,6 +5,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -19,10 +20,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
+import javax.swing.WindowConstants;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
@@ -122,7 +124,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			if (args[0]!=null)
 				path = args[0];
 		}
-		final String fpath = path!=null? path: System.getProperty("user.dir")+"\\moodinput";
+		final String fpath = path!=null? path: System.getProperty("user.dir")+"\\moodinput\\";
 		
 		player.initComponents(fpath);
 
@@ -136,7 +138,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					watcher = FileSystems.getDefault().newWatchService();
 					Path dir = Paths.get(fpath);
 					WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);//, ENTRY_MODIFY);
-					System.out.print("Watching directory "+dir.toAbsolutePath().toString());
+					System.out.println("Watching directory "+dir.toAbsolutePath().toString());
 					player.inputString = new StringBuilder();
 					//put poller in new thread called mood-change reader
 					while(player.terminationSwitch==false){
@@ -149,8 +151,8 @@ public class SentencePlayer extends javax.swing.JFrame  {
 							@SuppressWarnings("unchecked")
 							WatchEvent<Path> ev = (WatchEvent<Path>)event;
 							Path filename = ev.context();
-							File file = new File(filename.toAbsolutePath().toString()); 
-							System.out.println("New changes spotted in "+file.getAbsolutePath());
+							String pathString = fpath+File.separator+filename;
+							File file = new File(pathString);
 
 							BufferedReader br;
 							try {
@@ -199,7 +201,17 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		new SwingWorker<Void, String>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				JOptionPane.showMessageDialog(null, new JScrollPane(player.textArea));  
+				JFrame mainFrame = new JFrame("Java SWING Examples");
+				mainFrame.setSize(400,400);
+				JPanel controlPanel= new JPanel();
+				mainFrame.add(controlPanel);
+				controlPanel.add(player.textArea);
+				player.textArea.setEditable(false);
+				player.textArea.setFont(new Font("Serif", Font.ITALIC, 16));
+				player.textArea.setLineWrap(true);
+				player.textArea.setWrapStyleWord(true);
+				mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+				mainFrame.setVisible(true);  
 				return null;
 			}
 		}.execute();
@@ -214,10 +226,10 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				//default starting mood
 				player.musicGen.Emotion.setPleasantness();
 				
-				if (next_index >= player.sentenceBuffer.size()) {
-					Thread.sleep(pace_duration);
-				}
-				else {
+				while (player.terminationSwitch==false) {
+					while (next_index >= player.sentenceBuffer.size()) {
+						Thread.sleep(pace_duration);
+					}
 					MoodSentence next = player.sentenceBuffer.get(next_index);
 					EmotionHandler emotion = player.musicGen.Emotion;
 					switch(next.mood) {
