@@ -166,7 +166,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 									String[] split = st.split("#");
 									String sentence = split[0];
 									String moodString = split[1];
-									Mood mood = Mood.valueOf(moodString);
+									Mood mood = Mood.Calm;//Mood.valueOf(moodString);
 									player.sentenceBuffer.add(new MoodSentence(sentence, mood, player.inputString.length(), player.inputString.length()+st.length()-1));
 									player.inputString.append(sentence);
 
@@ -264,18 +264,14 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					default:
 						break;
 					}
-			        if(worker!=null) worker.cancel(true);
-			        worker = new SwingWorker<Void, String>(){
-			            @Override
-			            protected Void doInBackground() throws Exception {
-			            	player.musicGen.scr.empty();
-			            	player.musicGen.Generate(120);
-			                Play.midi(player.musicGen.scr);
-			                return null;
-			            }
-			        };
-			        worker.execute();
-					Thread.sleep(determineDuration(next));
+	            	while(Play.cycleIsPlaying()) {
+				        Play.waitCycle(player.musicGen.scr,
+				                0);
+	            	}
+	            	player.musicGen.scr.empty();
+	            	player.musicGen.Generate(20);
+	                Play.midi(player.musicGen.scr);
+	                return null;
 				}
 				
 
