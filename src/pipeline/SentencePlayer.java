@@ -87,12 +87,14 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 			this.sentence = st;
 			this.mood = mood;
+			this.startIndex = start;
+			this.endIndex = end;
 		}
 
 		public String sentence = "";
 		public Mood mood = Mood.Neutral;
-		public int startIndex = 0;
-		public int endIndex = 0;
+		public int startIndex = -1;
+		public int endIndex = -1;
 	}
 
 	private void initComponents(String sentenceDir) {
@@ -237,7 +239,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					System.out.print(next.mood.name());
 					System.out.println(next.startIndex +", "+next.endIndex);
 					try {
-						player.highlighter.addHighlight(next.endIndex, next.endIndex, player.painter );
+						player.highlighter.addHighlight(next.startIndex, next.endIndex, player.painter );
 					} catch (BadLocationException e) {
 						e.printStackTrace();
 					}
