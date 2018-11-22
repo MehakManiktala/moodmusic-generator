@@ -18,7 +18,6 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -125,7 +124,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			if (args[0]!=null)
 				path = args[0];
 		}
-		final String fpath = path!=null? path: System.getProperty("user.dir")+"\\moodinput\\";
+		final String fpath = path!=null? path: System.getProperty("user.dir")+"\\moodinput";
 		
 		player.initComponents(fpath);
 
@@ -275,6 +274,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			                return null;
 			            }
 			        };
+			        worker.execute();
 					Thread.sleep(determineDuration(next));
 				}
 				
