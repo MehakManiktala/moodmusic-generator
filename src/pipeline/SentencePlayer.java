@@ -53,7 +53,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	private JTextArea textArea;
 	private Highlighter highlighter;
 	HighlightPainter painter;
-	private StringBuilder inputString;
 	private List<MoodSentence> sentenceBuffer = new LinkedList<MoodSentence>();
 	private boolean terminationSwitch = false;
 
@@ -118,7 +117,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		System.out.println("Running");
 
 		SentencePlayer player = new SentencePlayer();
-
 		String path = null;
 		if (args.length > 0) {
 			if (args[0]!=null)
@@ -139,7 +137,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					Path dir = Paths.get(fpath);
 					WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);//, ENTRY_MODIFY);
 					System.out.println("Watching directory "+dir.toAbsolutePath().toString());
-					player.inputString = new StringBuilder();
+					int previous_index = 0;//keep track of where sentences start and stop in the collective text
 					//put poller in new thread called mood-change reader
 					while(player.terminationSwitch==false){
 
@@ -167,18 +165,11 @@ public class SentencePlayer extends javax.swing.JFrame  {
 									String sentence = split[0];
 									String moodString = split[1];
 									Mood mood = Mood.Calm;//Mood.valueOf(moodString);
-									player.sentenceBuffer.add(new MoodSentence(sentence, mood, player.inputString.length(), player.inputString.length()+st.length()-1));
-									player.inputString.append(sentence);
-
-									try {
-										player.highlighter.addHighlight(0, player.inputString.length(), player.painter );
-									} catch (BadLocationException e) {
-										e.printStackTrace();
-									}
+									player.sentenceBuffer.add(new MoodSentence(sentence, mood, previous_index, previous_index+sentence.length()-1));
+									previous_index += sentence.length();
 
 
 								}
-								player.textArea.setText(player.inputString.toString());
 
 
 							} catch (IOException e) {
@@ -228,10 +219,28 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				player.musicGen.Emotion.setPleasantness();
 				
 				while (player.terminationSwitch==false) {
+					
+	            	player.musicGen.scr.empty();
+	            	player.musicGen.Generate(20);
+	                Play.midi(player.musicGen.scr);
+	            	while(Play.cycleIsPlaying()) {
+				        Play.waitCycle(player.musicGen.scr,
+				                0);
+	            	}
+	                
 					while (next_index >= player.sentenceBuffer.size()) {
 						Thread.sleep(pace_duration);
 					}
 					MoodSentence next = player.sentenceBuffer.get(next_index);
+					player.textArea.append(next.sentence);
+					System.out.print(next.sentence);
+					System.out.print(next.mood.name());
+					System.out.println(next.startIndex +", "+next.endIndex);
+					try {
+						player.highlighter.addHighlight(next.endIndex, next.endIndex, player.painter );
+					} catch (BadLocationException e) {
+						e.printStackTrace();
+					}
 					next_index++;
 					EmotionHandler emotion = player.musicGen.Emotion;
 					switch(next.mood) {
@@ -264,14 +273,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					default:
 						break;
 					}
-	            	while(Play.cycleIsPlaying()) {
-				        Play.waitCycle(player.musicGen.scr,
-				                0);
-	            	}
-	            	player.musicGen.scr.empty();
-	            	player.musicGen.Generate(20);
-	                Play.midi(player.musicGen.scr);
-	                return null;
 				}
 				
 
