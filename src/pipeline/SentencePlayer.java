@@ -57,14 +57,20 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	private boolean terminationSwitch = false;
 
 	public static enum Mood{
-		Sad(1.5),
-		Happy(.7),
-		Surprised(.4),
-		Neutral(1), Drowsy(2), Quiescent(1.2), Active(.5), Calm(1.3), Fear(0.6);
+		Sad(1.5, Color.blue),
+		Happy(.7, Color.pink),
+		Surprised(.4, Color.yellow),
+		Drowsy(2, Color.blue),
+		Quiescent(1.2, Color.gray),
+		Active(.5, Color.green), 
+		Calm(1.3, Color.green), 
+		Fear(0.6, Color.red);
 		
 	   double multiplier;
-	   Mood(double m) {
+	   Color color;
+	   Mood(double m, Color color) {
 	      multiplier = m;
+	      this.color = color;
 	   }
 	}
 	private static class MoodSentence{
@@ -92,7 +98,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		}
 
 		public String sentence = "";
-		public Mood mood = Mood.Neutral;
+		public Mood mood = Mood.Calm;
 		public int startIndex = -1;
 		public int endIndex = -1;
 	}
@@ -248,7 +254,8 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					System.out.println(next.startIndex +", "+next.endIndex);
 					try {
 						player.highlighter.removeAllHighlights();
-						player.highlighter.addHighlight(next.startIndex, next.endIndex, player.painter );
+						HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(next.mood.color);
+						player.highlighter.addHighlight(next.startIndex, next.endIndex, p );
 					} catch (BadLocationException e) {
 						e.printStackTrace();
 					}
@@ -257,8 +264,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					switch(next.mood) {
 					case Happy:
 						emotion.setPleasantness();
-						break;
-					case Neutral:
 						break;
 					case Calm:
 						emotion.setLowNegativeAffect();
@@ -282,6 +287,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				        emotion.setHighNegativeAffect();
 				        break;
 					default:
+						System.out.println("Unrecognized mood "+next.mood.name());
 						break;
 					}
 				}
