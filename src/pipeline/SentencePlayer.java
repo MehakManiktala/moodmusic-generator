@@ -40,7 +40,6 @@ import musicgenerator.MusicGenerator;
 public class SentencePlayer extends javax.swing.JFrame  {
 
 	private static final String TERMINATION = "$T3RMN@+N$";
-    private static SwingWorker<Void,String> worker;
 
 	private static WatchService watcher;
 
@@ -105,7 +104,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 	private void initComponents(String sentenceDir) {
 
-		textArea = new JTextArea(10, 30);
+		textArea = new JTextArea(26, 64);
 
 		String text = "Waiting for sentences in "+sentenceDir;
 
@@ -209,7 +208,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			@Override
 			protected Void doInBackground() throws Exception {
 				JFrame mainFrame = new JFrame("Java SWING Examples");
-				mainFrame.setSize(400,400);
+				mainFrame.setSize(800,640);
 				JPanel controlPanel= new JPanel();
 				mainFrame.add(controlPanel);
 				player.textArea.setEditable(false);
