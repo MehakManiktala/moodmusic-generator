@@ -236,7 +236,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				while (player.terminationSwitch==false) {
 					
 	            	player.musicGen.scr.empty();
-	            	player.musicGen.Generate(20);
+	            	player.musicGen.Generate(24);
 	                Play.midi(player.musicGen.scr);
 	            	while(Play.cycleIsPlaying()) {
 				        Play.waitCycle(player.musicGen.scr,
