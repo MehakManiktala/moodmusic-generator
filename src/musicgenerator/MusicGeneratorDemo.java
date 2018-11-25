@@ -227,7 +227,7 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         // TODO add your handling code here:
         Generator.scr.empty();
-        Generator.Emotion.setAngryMusic();;
+        Generator.Emotion.setLowNegativeAffect();
         
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
