@@ -118,8 +118,8 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(jRadioButtonAngry);
-        jRadioButton8.setText("Angry/Brooding");
-        jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
+        jRadioButtonAngry.setText("Angry/Brooding");
+        jRadioButtonAngry.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonAngryActionPerformed(evt);
             }
@@ -158,6 +158,7 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
                             .addComponent(jRadioButton5)
                             .addComponent(jRadioButton6)
                             .addComponent(jRadioButton8)
+                            .addComponent(jRadioButtonAngry)
                             .addComponent(jRadioButton7)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(227, 227, 227)
@@ -187,6 +188,8 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
                 .addComponent(jRadioButton7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButton8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButtonAngry)
                 .addGap(26, 26, 26)
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -224,7 +227,7 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         // TODO add your handling code here:
         Generator.scr.empty();
-        Generator.Emotion.setLowNegativeAffect();
+        Generator.Emotion.setAngryMusic();;
         
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
