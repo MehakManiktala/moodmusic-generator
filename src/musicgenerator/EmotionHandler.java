@@ -20,6 +20,44 @@ public class EmotionHandler {
     
     //int map[] = {60,62,64,65,67,69,71};
     
+    public void setAngryMusic(){
+
+        emoTempo = 100.0;
+        int map[] = {33,36,39,42,44,48,50};
+        emoMap = map;
+        
+        //double[][] CT1;
+        //ChordMC = CT1;
+        //double[][] NT1;
+        //NoteMC = NT1;
+        //double[][] OT1;
+        //OctMC = OT1;
+        double[][] VT1 ={ {0.16,0.2,0.32,0.32},
+                           {0.16,0.2,0.32,0.32},
+                           {0.16,0.2,0.32,0.32},
+                           {0.16,0.2,0.32,0.32}
+                        };
+        ValueMC = VT1; 
+        
+          double[][] OT = { {0.9,0.08,0.02},
+                          {0.05,0.9,0.05},
+                          {0.02,0.08,0.9}
+        };
+        OctMC = OT;
+        
+        
+        
+        double[][] CT =       { { 0.001, 0.251, 0.251, 0.001, 0.001, 0.251, 0.251},
+				        		{ 0.001, 0.251, 0.251, 0.001, 0.001, 0.251, 0.251},
+				        		{ 0.001, 0.251, 0.251, 0.001, 0.001, 0.251, 0.251},
+				        		{ 0.001, 0.251, 0.251, 0.001, 0.001, 0.251, 0.251},
+				        		{ 0.001, 0.251, 0.251, 0.001, 0.001, 0.251, 0.251},
+				        		{ 0.001, 0.251, 0.251, 0.001, 0.001, 0.251, 0.251},
+				        		{ 0.001, 0.251, 0.251, 0.001, 0.001, 0.251, 0.251}
+                              };
+        //MidiHandler.Maj1,MidiHandler.Min2,MidiHandler.Min3,MidiHandler.Maj4,MidiHandler.Maj5,MidiHandler.Min6,MidiHandler.Dim7
+        ChordMC = CT;
+    }
     public void setLowNegativeAffect(){ // Barat
 
         emoTempo = 60.0;
@@ -57,7 +95,7 @@ public class EmotionHandler {
                               };
         ChordMC = CT;
     }
-    public void setPleasantness(){
+    public void setPleasantness(){//Happy
         emoTempo = 160.0;
         int map[] = {72,74,76,77,79,81,83};
         emoMap = map;

@@ -45,6 +45,7 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
         jRadioButton6 = new javax.swing.JRadioButton();
         jRadioButton7 = new javax.swing.JRadioButton();
         jRadioButton8 = new javax.swing.JRadioButton();
+        jRadioButtonAngry = new javax.swing.JRadioButton();
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
@@ -113,6 +114,14 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
         jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton8ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButtonAngry);
+        jRadioButton8.setText("Angry/Brooding");
+        jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonAngryActionPerformed(evt);
             }
         });
 
@@ -205,6 +214,13 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jRadioButtonAngryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        // TODO add your handling code here:
+        Generator.scr.empty();
+        Generator.Emotion.setAngryMusic();
+        
+    }//GEN-LAST:event_jRadioButtonAngryActionPerformed
+    
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         // TODO add your handling code here:
         Generator.scr.empty();
@@ -331,5 +347,6 @@ public class MusicGeneratorDemo extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton6;
     private javax.swing.JRadioButton jRadioButton7;
     private javax.swing.JRadioButton jRadioButton8;
+    private javax.swing.JRadioButton jRadioButtonAngry;
     // End of variables declaration//GEN-END:variables
 }
