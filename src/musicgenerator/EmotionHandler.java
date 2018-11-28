@@ -17,6 +17,7 @@ public class EmotionHandler {
     public double[][] ValueMC; // ini semua keluaran dari EmotionHandler
     public int emoMap[];
     public double emoTempo;
+    public double chanceOf7 = 0;
     
     //int map[] = {60,62,64,65,67,69,71};
     
@@ -25,6 +26,7 @@ public class EmotionHandler {
         emoTempo = 150.0;
         int map[] = {33,36,39,42,44,48,50};
         emoMap = map;
+        chanceOf7 = .5;
         
         //double[][] CT1;
         //ChordMC = CT1;
@@ -64,6 +66,7 @@ public class EmotionHandler {
         emoTempo = 60.0;
         int map[] = {60,62,64,65,67,69,71};
         emoMap = map;
+        chanceOf7 = 0;
         
         //double[][] CT1;
         //ChordMC = CT1;
@@ -100,6 +103,7 @@ public class EmotionHandler {
         emoTempo = 160.0;
         int map[] = {72,74,76,77,79,81,83};
         emoMap = map;
+        chanceOf7 = 0;
         
         double[][] VT1 = { {0.333,0.333,0.167,0.167},
                            {0.333,0.333,0.167,0.167},
@@ -130,6 +134,7 @@ public class EmotionHandler {
         emoTempo = 180.0;
         int map[] = {60,62,64,65,67,69,71};
         emoMap = map;
+        chanceOf7 = 0;
         
          double[][] VT1 = { {0.333,0.333,0.167,0.167},
                            {0.333,0.333,0.167,0.167},
@@ -158,6 +163,7 @@ public class EmotionHandler {
         emoTempo = 220.0;
         int map[] = {48,50,52,53,55,57,59};
         emoMap = map;
+        chanceOf7 = 0;
         
         double[][] VT1 = { {0.375,0.375,0.125,0.125},
                            {0.375,0.375,0.125,0.125},
@@ -186,6 +192,7 @@ public class EmotionHandler {
         emoTempo = 120.0;
         int map[] = {36,38,40,41,43,45,47};
         emoMap = map;
+        chanceOf7 = 0;
         
         double[][] VT1 = { {0.25,0.25,0.25,0.25},
                            {0.25,0.25,0.25,0.25},
@@ -215,6 +222,7 @@ public class EmotionHandler {
         emoTempo = 90.0;
         int map[] = {36,38,40,41,43,45,47};
         emoMap = map;
+        chanceOf7 = 0;
         
         double[][] VT1 = { {0.111,0.222,0.333,0.333},
                            {0.111,0.222,0.333,0.333},
@@ -244,6 +252,7 @@ public class EmotionHandler {
         emoTempo = 70.0;
         int map[] = {48,50,52,53,55,57,59};
         emoMap =  map;
+        chanceOf7 = 0;
         
         double[][] VT1 = { {0.111,0.222,0.333,0.333},
                            {0.111,0.222,0.333,0.333},
@@ -272,6 +281,7 @@ public class EmotionHandler {
         emoTempo = 30.0;
         int map[] = {60,62,64,65,67,69,71};
         emoMap = map;
+        chanceOf7 = 0;
         
         double[][] VT1 = { {0.125,0.125,0.375,0.375},
                            {0.125,0.125,0.375,0.375},
