@@ -138,7 +138,7 @@ public class MusicGenerator {
                    chordMid.phrase.addNote(cMid);
                 }
                 if (cdCounter == 0){
-                    if(ChordMC.curState == 7){//Dim7
+                    if(ChordMC.curState == 7 || Math.random()> Emotion.chanceOf7){//Dim7
                         Note cDim = new Note();
                         cDim.setPitch(Emotion.emoMap[ChordMC.curState - 1] - 6);
                         System.out.println("cDom pitch: " + cDom.getPitch());
