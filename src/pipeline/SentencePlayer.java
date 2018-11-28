@@ -180,6 +180,8 @@ public class SentencePlayer extends javax.swing.JFrame  {
 									player.sentenceBuffer.add(new MoodSentence(sentence, mood, previous_index, previous_index+sentence.length()-1));
 									previous_index += sentence.length();
 
+									player.textArea.append(sentence);
+
 
 								}
 
@@ -244,7 +246,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 						Thread.sleep(pace_duration);
 					}
 					MoodSentence next = player.sentenceBuffer.get(next_index);
-					player.textArea.append(next.sentence);
 					System.out.print(next.sentence);
 					System.out.print(next.mood.name());
 					System.out.println(next.startIndex +", "+next.endIndex);
