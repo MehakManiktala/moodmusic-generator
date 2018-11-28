@@ -22,7 +22,7 @@ public class EmotionHandler {
     
     public void setAngryMusic(){
 
-        emoTempo = 100.0;
+        emoTempo = 150.0;
         int map[] = {33,36,39,42,44,48,50};
         emoMap = map;
         
