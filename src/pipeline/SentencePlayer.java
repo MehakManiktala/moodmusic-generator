@@ -254,7 +254,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					System.out.println(next.startIndex +", "+next.endIndex);
 					try {
 						player.highlighter.removeAllHighlights();
-						HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(next.mood.color);
+						HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(Mood.Sad.color);
 						player.highlighter.addHighlight(next.startIndex, next.endIndex, p );
 					} catch (BadLocationException e) {
 						e.printStackTrace();
