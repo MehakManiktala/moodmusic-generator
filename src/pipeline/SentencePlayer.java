@@ -101,7 +101,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 	private void initComponents(String sentenceDir) {
 
-		textArea = new JTextArea(26, 64);
+		textArea = new JTextArea(20, 64);
 
 		String text = "Waiting for sentences in "+sentenceDir;
 
@@ -214,10 +214,15 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				player.textArea.setFont(new Font("Serif", Font.ITALIC, 16));
 				player.textArea.setLineWrap(true);
 				player.textArea.setWrapStyleWord(true);
+				Font font = player.textArea.getFont();
+				float size = font.getSize() + 20.0f;
+				player.textArea.setFont( font.deriveFont(size) );
 				JScrollPane scrollPane = new JScrollPane(player.textArea); 
 				controlPanel.add(scrollPane);
 				mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-				mainFrame.setVisible(true);  
+				mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+				mainFrame.setUndecorated(true);
+				mainFrame.setVisible(true);
 				return null;
 			}
 		}.execute();
