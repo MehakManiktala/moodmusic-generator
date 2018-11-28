@@ -138,21 +138,13 @@ public class MusicGenerator {
                    chordMid.phrase.addNote(cMid);
                 }
                 if (cdCounter == 0){
-                    if(ChordMC.curState == 7){
-                        cDom.setPitch(Emotion.emoMap[ChordMC.curState - 1] - 6);
+                    if(ChordMC.curState == 7){//Dim7
+                        Note cDim = new Note();
+                        cDim.setPitch(Emotion.emoMap[ChordMC.curState - 1] - 6);
                         System.out.println("cDom pitch: " + cDom.getPitch());
                         ValMC.nextState();
-                        cDom.setLength(ValMap[ValMC.curState - 1]);
-                        switch (ValMC.curState) {
-                            case 1 : cdCounter = 1;
-                                     break;
-                            case 2 : cdCounter = 2;
-                                     break;
-                            case 3 : cdCounter = 4;
-                                     break;
-                            case 4 : cdCounter = 8;
-                                     break;
-                        }
+                        cDim.setLength(ValMap[ValMC.curState - 1]);
+                    	chordDom.phrase.addNote(cDim);
                         
                     }
                     else{
