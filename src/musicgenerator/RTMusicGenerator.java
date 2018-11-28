@@ -13,10 +13,6 @@ import jm.audio.Instrument;
 import jm.audio.RTMixer;
 import jm.music.data.Note;
 import jm.music.rt.RTLine;
-
-import jm.music.data.*;
-import jm.audio.*;
-import jm.music.rt.*;
 /**
  *
  * @author user
@@ -37,7 +33,8 @@ public class RTMusicGenerator extends RTMixer {
         MarkovChain OctMC = new MarkovChain();
         MarkovChain ValMC = new MarkovChain();
         MarkovChain ChordMC = new MarkovChain();
-        int transposer = randnum.nextInt(12) + 1;
+        @SuppressWarnings("unused")
+		int transposer = randnum.nextInt(12) + 1;
         int index = 0;
         
         NoteMC.transition = map[randnum.nextInt(6)];
@@ -56,10 +53,10 @@ public class RTMusicGenerator extends RTMixer {
         ChordMC.states = 7;
         ChordMC.curState = 1;
         
-        MidiHandler Melody = new MidiHandler();
-        MidiHandler chordRoot = new MidiHandler();
-        MidiHandler chordMid = new MidiHandler();
-        MidiHandler chordDom = new MidiHandler();
+        //MidiHandler Melody = new MidiHandler();
+        //MidiHandler chordRoot = new MidiHandler();
+        //MidiHandler chordMid = new MidiHandler();
+        //MidiHandler chordDom = new MidiHandler();
         
 		RTLine rootChordLine = new RTLine(instruments) {
 
