@@ -30,8 +30,6 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
-import inst.FractalInst;
-import jm.audio.Instrument;
 import jm.util.Play;
 import musicgenerator.EmotionHandler;
 import musicgenerator.MusicGenerator;
@@ -43,8 +41,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 	private static WatchService watcher;
 
-	Instrument piano = new FractalInst(30);
-	Instrument[] instruments = new Instrument[] {piano};
 	
 	MusicGenerator musicGen = new MusicGenerator();
 
