@@ -126,7 +126,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			if (args[0]!=null)
 				path = args[0];
 		}
-		final String fpath = path!=null? path: System.getProperty("user.dir")+"\\moodinput";
+		final String fpath = path!=null? path: System.getProperty("user.dir")+"\\inputsentences";
 		
 		player.initComponents(fpath);
 
