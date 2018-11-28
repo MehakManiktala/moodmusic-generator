@@ -82,7 +82,15 @@ public class MidiHandler {
              {0.118,0.118,0.176,0.118,0.176,0.118,0.176}
      };
     
-
+    public class Chord{//Unused
+    	
+    	public double[][] mc;
+    	public String name;
+    	public Chord(double[][] mc, String name) {
+    		this.mc = mc;
+    		this.name = name;
+    	}
+    }
      
      public void setOctave(int map[]){
          
