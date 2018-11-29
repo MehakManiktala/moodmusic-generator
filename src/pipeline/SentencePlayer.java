@@ -108,6 +108,9 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	private void displaySentences() {
 		this.textArea.setText("");
 		for (MoodSentence s : this.sentenceBuffer) {
+			if (this.showMoodCB.isSelected()) {
+				this.textArea.append("["+s.mood.name()+"] ");
+			}
 			this.textArea.append(s.sentence);
 		}
 	}
@@ -240,6 +243,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				player.showMoodCB.addActionListener(new java.awt.event.ActionListener() {
 		            public void actionPerformed(java.awt.event.ActionEvent evt) {
 		                System.out.println("Checked:" + player.showMoodCB.isSelected());
+		                player.displaySentences();
 		            }
 		        });
 				mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
