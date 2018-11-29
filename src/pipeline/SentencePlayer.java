@@ -113,6 +113,23 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			}
 			this.textArea.append(s.sentence);
 		}
+		for (MoodSentence s : this.sentenceBuffer) {
+			if (this.showMoodCB.isSelected()) {
+				if (s.mood.color == null) {
+					System.out.println("NULL COLOR");
+				}
+				highlighter = textArea.getHighlighter();
+				painter = new DefaultHighlighter.DefaultHighlightPainter(s.mood.color);
+				try {
+					System.out.println(s.moodStartIndex+", "+ s.moodEndIndex+", ");
+					System.out.println(s.mood.color);
+					this.highlighter.addHighlight(s.moodStartIndex, s.moodEndIndex, painter);
+				} catch (BadLocationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private void initComponents(String sentenceDir) {
@@ -194,9 +211,11 @@ public class SentencePlayer extends javax.swing.JFrame  {
 									String sentence = split[0];
 									String moodString = split[1];
 									Mood mood = Mood.valueOf(moodString);
+									System.out.println(mood.color);
 									String moodPiece = "["+mood.name()+"]" ;
 									player.sentenceBuffer.add(new MoodSentence(sentence, mood, previous_index, previous_index+sentence.length()-1, previous_moodIndex, previous_moodIndex + sentence.length()-1 + moodPiece.length()));
 									previous_index += sentence.length();
+									previous_moodIndex += sentence.length() + moodPiece.length();
 
 									player.textArea.append(sentence);
 
@@ -283,7 +302,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					System.out.println(next.startIndex +", "+next.endIndex);
 					try {
 						player.highlighter.removeAllHighlights();
-						HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(Mood.Sad.color);
+						HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(null);
 						player.highlighter.addHighlight(next.startIndex, next.endIndex, p );
 					} catch (BadLocationException e) {
 						e.printStackTrace();
