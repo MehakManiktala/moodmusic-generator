@@ -61,7 +61,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		Quiescent(1.2, new Color(171, 210, 216)),//blue
 		Active(.5, new Color(200,200,150)),//orange
 		Calm(1.3, new Color(200,255,150)),//green
-		Brooding(1.3, new Color(165, 70, 58)),//dark red
+		Angry(1.3, new Color(165, 70, 58)),//dark red
 		Fear(0.6, new Color(194, 179, 214));//purple
 		
 	   double multiplier;
@@ -223,6 +223,11 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				player.showMoodCB = new JCheckBox("Show Mood");
 				controlPanel.add(scrollPane);
 				controlPanel.add(player.showMoodCB);
+				player.showMoodCB.addActionListener(new java.awt.event.ActionListener() {
+		            public void actionPerformed(java.awt.event.ActionEvent evt) {
+		                System.out.println("Checked:" + player.showMoodCB.isSelected());
+		            }
+		        });
 				mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 				mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 				mainFrame.setUndecorated(true);
