@@ -212,8 +212,8 @@ public class SentencePlayer extends javax.swing.JFrame  {
 									String moodString = split[1];
 									Mood mood = Mood.valueOf(moodString);
 									System.out.println(mood.color);
-									String moodPiece = "["+mood.name()+"]" ;
-									player.sentenceBuffer.add(new MoodSentence(sentence, mood, previous_index, previous_index+sentence.length()-1, previous_moodIndex, previous_moodIndex + sentence.length()-1 + moodPiece.length()));
+									String moodPiece = "["+mood.name()+"] ";
+									player.sentenceBuffer.add(new MoodSentence(sentence, mood, previous_index, previous_index+sentence.length()-1, previous_moodIndex, previous_moodIndex + sentence.length()+ moodPiece.length() ));
 									previous_index += sentence.length();
 									previous_moodIndex += sentence.length() + moodPiece.length();
 
