@@ -19,6 +19,7 @@ import java.nio.file.WatchService;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -46,6 +47,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 	//UI Components
 	private JTextArea textArea;
+	private JCheckBox showMoodCB;
 	private Highlighter highlighter;
 	HighlightPainter painter;
 	private List<MoodSentence> sentenceBuffer = new LinkedList<MoodSentence>();
@@ -218,7 +220,9 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				float size = font.getSize() + 20.0f;
 				player.textArea.setFont( font.deriveFont(size) );
 				JScrollPane scrollPane = new JScrollPane(player.textArea); 
+				player.showMoodCB = new JCheckBox("Show Mood");
 				controlPanel.add(scrollPane);
+				controlPanel.add(player.showMoodCB);
 				mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 				mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 				mainFrame.setUndecorated(true);
