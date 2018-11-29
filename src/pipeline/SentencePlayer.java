@@ -19,6 +19,7 @@ import java.nio.file.WatchService;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -48,6 +49,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	//UI Components
 	private JTextArea textArea;
 	private JCheckBox showMoodCB;
+	private JButton clear;
 	private Highlighter highlighter;
 	HighlightPainter painter;
 	private List<MoodSentence> sentenceBuffer = new LinkedList<MoodSentence>();
@@ -265,6 +267,13 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		                player.displaySentences();
 		            }
 		        });
+				player.clear = new JButton("Clear");
+				controlPanel.add(player.clear);
+				player.clear.addActionListener(new java.awt.event.ActionListener() {
+		            public void actionPerformed(java.awt.event.ActionEvent evt) {
+		            	player.clear();
+		            }
+		        });
 				mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 				mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 				mainFrame.setUndecorated(true);
@@ -349,6 +358,12 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 
 	}
+	protected void clear() {
+		this.sentenceBuffer.clear();
+		this.displaySentences();
+		
+	}
+
 	static int determineDuration(MoodSentence sentence){
 		
 		int duration = sentence.sentence.length();
