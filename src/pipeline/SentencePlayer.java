@@ -87,11 +87,13 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			}
 		}
 		
-		public MoodSentence(String st, Mood mood, int start, int end) {
+		public MoodSentence(String st, Mood mood, int start, int end, int moodStart, int moodEnd) {
 
 			this.sentence = st;
 			this.mood = mood;
 			this.startIndex = start;
+			this.moodStartIndex = moodStart;
+			this.moodEndIndex = moodEnd;
 			this.endIndex = end;
 		}
 
@@ -99,6 +101,15 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		public Mood mood = Mood.Calm;
 		public int startIndex = -1;
 		public int endIndex = -1;
+		public int moodStartIndex =-1;
+		public int moodEndIndex =-1;
+	}
+	
+	private void displaySentences() {
+		this.textArea.setText("");
+		for (MoodSentence s : this.sentenceBuffer) {
+			this.textArea.append(s.sentence);
+		}
 	}
 
 	private void initComponents(String sentenceDir) {
@@ -145,6 +156,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);//, ENTRY_MODIFY);
 					System.out.println("Watching directory "+dir.toAbsolutePath().toString());
 					int previous_index = 0;//keep track of where sentences start and stop in the collective text
+					int previous_moodIndex = 0;
 					//put poller in new thread called mood-change reader
 					while(player.terminationSwitch==false){
 
@@ -179,13 +191,15 @@ public class SentencePlayer extends javax.swing.JFrame  {
 									String sentence = split[0];
 									String moodString = split[1];
 									Mood mood = Mood.valueOf(moodString);
-									player.sentenceBuffer.add(new MoodSentence(sentence, mood, previous_index, previous_index+sentence.length()-1));
+									String moodPiece = "["+mood.name()+"]" ;
+									player.sentenceBuffer.add(new MoodSentence(sentence, mood, previous_index, previous_index+sentence.length()-1, previous_moodIndex, previous_moodIndex + sentence.length()-1 + moodPiece.length()));
 									previous_index += sentence.length();
 
 									player.textArea.append(sentence);
 
 
 								}
+								player.displaySentences();
 
 
 							} catch (IOException e) {
