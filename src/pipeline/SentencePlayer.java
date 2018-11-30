@@ -350,6 +350,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 						else {
 							player.currentMood.setText("");
 						}
+						player.displaySentences();
 						player.highlighter.removeAllHighlights();
 						HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(null);
 						player.highlighter.addHighlight(next.startIndex, next.endIndex, p );
