@@ -211,10 +211,18 @@ public class SentencePlayer extends javax.swing.JFrame  {
 										player.terminationSwitch = true;
 										break;
 									}
+									System.out.println(st);
 									String[] split = st.split("#");
 									String sentence = split[0];
 									String moodString = split[1];
-									Mood mood = Mood.valueOf(moodString);
+									System.out.println(sentence);
+									System.out.println(moodString);
+									Mood mood = Mood.Quiescent;
+									try {
+									mood = Mood.valueOf(moodString);
+									}catch(Exception ex) {
+										ex.printStackTrace();
+									}
 									System.out.println(mood.color);
 									String moodPiece = "["+mood.name()+"] ";
 									player.sentenceBuffer.add(new MoodSentence(sentence, mood, previous_index, previous_index+sentence.length()-1, previous_moodIndex, previous_moodIndex + sentence.length()+ moodPiece.length() ));
