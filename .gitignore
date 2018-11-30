@@ -2,5 +2,5 @@
 /nbproject/private/
 /dist/
 /bin/
-
+/Sentiment Analysis/data/
 *.moodsentence
