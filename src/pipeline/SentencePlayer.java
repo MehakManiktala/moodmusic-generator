@@ -298,6 +298,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		            }
 		        });
 				player.clear = new JButton("Clear");
+				player.clear.setEnabled(false);
 				c = new GridBagConstraints();
                 c.fill = GridBagConstraints.HORIZONTAL;
                 c.gridx = 1;
