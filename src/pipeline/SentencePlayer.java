@@ -1,11 +1,12 @@
 package pipeline;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -249,7 +250,8 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			protected Void doInBackground() throws Exception {
 				JFrame mainFrame = new JFrame("Java SWING Examples");
 				mainFrame.setSize(800,640);
-				JPanel controlPanel= new JPanel();
+				JPanel controlPanel = new JPanel(new GridBagLayout());
+				controlPanel.setLayout(new GridBagLayout());
 				mainFrame.add(controlPanel);
 				player.textArea.setEditable(false);
 				player.textArea.setFont(new Font("Serif", Font.ITALIC, 16));
@@ -260,9 +262,30 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				player.textArea.setFont( font.deriveFont(size) );
 				JScrollPane scrollPane = new JScrollPane(player.textArea); 
 				player.showMoodCB = new JCheckBox("Show Mood");
-				controlPanel.add(scrollPane);
-				controlPanel.add(player.showMoodCB);
-				controlPanel.add(player.currentMood);
+				
+				GridBagConstraints c = new GridBagConstraints();
+                c.fill = GridBagConstraints.HORIZONTAL;
+                c.gridx = 0;
+                c.gridy = 1;
+                c.gridwidth = 3;
+				controlPanel.add(scrollPane, c);
+				
+				c = new GridBagConstraints();
+                c.fill = GridBagConstraints.HORIZONTAL;
+                c.gridx = 0;
+                c.gridy = 0;
+				controlPanel.add(player.showMoodCB, c);
+				
+				c = new GridBagConstraints();
+                c.fill = GridBagConstraints.HORIZONTAL;
+                c.gridx = 2;
+                c.gridy = 0;
+                player.currentMood.setSize(100, 50);
+                player.currentMood.setBounds(0, 100, 100, 100);
+				player.currentMood.setFont(new Font("Serif", Font.BOLD, 16));
+				player.currentMood.setEditable(false);
+				controlPanel.add(player.currentMood,c);
+				
 				player.showMoodCB.addActionListener(new java.awt.event.ActionListener() {
 		            public void actionPerformed(java.awt.event.ActionEvent evt) {
 		                System.out.println("Checked:" + player.showMoodCB.isSelected());
@@ -270,7 +293,11 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		            }
 		        });
 				player.clear = new JButton("Clear");
-				controlPanel.add(player.clear);
+				c = new GridBagConstraints();
+                c.fill = GridBagConstraints.HORIZONTAL;
+                c.gridx = 1;
+                c.gridy = 0;
+				controlPanel.add(player.clear, c);
 				player.clear.addActionListener(new java.awt.event.ActionListener() {
 		            public void actionPerformed(java.awt.event.ActionEvent evt) {
 		            	player.clear();
