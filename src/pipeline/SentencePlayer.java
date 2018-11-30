@@ -176,7 +176,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				try {
 					watcher = FileSystems.getDefault().newWatchService();
 					Path dir = Paths.get(fpath);
-					WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);//, ENTRY_MODIFY);
+					WatchKey key = dir.register(watcher, ENTRY_CREATE);//, ENTRY_MODIFY);
 					System.out.println("Watching directory "+dir.toAbsolutePath().toString());
 					int previous_index = 0;//keep track of where sentences start and stop in the collective text
 					int previous_moodIndex = 0;
@@ -262,7 +262,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				player.showMoodCB = new JCheckBox("Show Mood");
 				controlPanel.add(scrollPane);
 				controlPanel.add(player.showMoodCB);
-				controlPanel.add(player.currentMood);
+				//controlPanel.add(player.currentMood);
 				player.showMoodCB.addActionListener(new java.awt.event.ActionListener() {
 		            public void actionPerformed(java.awt.event.ActionEvent evt) {
 		                System.out.println("Checked:" + player.showMoodCB.isSelected());
