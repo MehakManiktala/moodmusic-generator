@@ -393,6 +393,8 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					case Fear:
 				        emotion.setHighNegativeAffect();
 				        break;
+					case Angry:
+						emotion.setAngryMusic();
 					default:
 						System.out.println("Unrecognized mood "+next.mood.name());
 						break;
