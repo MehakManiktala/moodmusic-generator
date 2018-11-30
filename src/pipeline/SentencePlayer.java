@@ -48,7 +48,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 	//UI Components
 	private JTextArea textArea;
-	private JTextArea currentMood;
+	private JTextArea currentMood = new JTextArea(1,10);
 	private JCheckBox showMoodCB;
 	private JButton clear;
 	private Highlighter highlighter;
@@ -262,7 +262,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				player.showMoodCB = new JCheckBox("Show Mood");
 				controlPanel.add(scrollPane);
 				controlPanel.add(player.showMoodCB);
-				//controlPanel.add(player.currentMood);
+				controlPanel.add(player.currentMood);
 				player.showMoodCB.addActionListener(new java.awt.event.ActionListener() {
 		            public void actionPerformed(java.awt.event.ActionEvent evt) {
 		                System.out.println("Checked:" + player.showMoodCB.isSelected());
