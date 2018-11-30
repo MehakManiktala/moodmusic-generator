@@ -257,9 +257,11 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				player.textArea.setFont(new Font("Serif", Font.ITALIC, 16));
 				player.textArea.setLineWrap(true);
 				player.textArea.setWrapStyleWord(true);
+				{
 				Font font = player.textArea.getFont();
 				float size = font.getSize() + 20.0f;
 				player.textArea.setFont( font.deriveFont(size) );
+				}
 				JScrollPane scrollPane = new JScrollPane(player.textArea); 
 				player.showMoodCB = new JCheckBox("Show Mood");
 				
@@ -280,10 +282,13 @@ public class SentencePlayer extends javax.swing.JFrame  {
                 c.fill = GridBagConstraints.HORIZONTAL;
                 c.gridx = 2;
                 c.gridy = 0;
-                player.currentMood.setSize(100, 50);
-                player.currentMood.setBounds(0, 100, 100, 100);
-				player.currentMood.setFont(new Font("Serif", Font.BOLD, 16));
+				player.currentMood.setFont(new Font("Serif", Font.BOLD, 32));
 				player.currentMood.setEditable(false);
+				{
+				Font font = player.currentMood.getFont();
+				float size = font.getSize() + 20.0f;
+				player.currentMood.setFont( font.deriveFont(size) );
+				}
 				controlPanel.add(player.currentMood,c);
 				
 				player.showMoodCB.addActionListener(new java.awt.event.ActionListener() {
