@@ -363,7 +363,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 						} catch (BadLocationException e) {
 							e.printStackTrace();
 						}
-						next_index++;
 						EmotionHandler emotion = player.musicGen.Emotion;
 						switch(next.mood) {
 						case Happy:
@@ -384,6 +383,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 							System.out.println("Unrecognized mood "+next.mood.name());
 							break;
 						}
+						next_index++;
 					}catch(Exception ex) {
 						ex.printStackTrace();
 					}
