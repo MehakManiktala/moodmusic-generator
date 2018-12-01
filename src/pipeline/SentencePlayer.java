@@ -285,12 +285,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				}
 				controlPanel.add(player.currentMood,c);
 				
-				player.showMoodCB.addActionListener(new java.awt.event.ActionListener() {
-		            public void actionPerformed(java.awt.event.ActionEvent evt) {
-		                System.out.println("Checked:" + player.showMoodCB.isSelected());
-		                player.displaySentences();
-		            }
-		        });
 				player.clear = new JButton("Clear");
 				player.clear.setEnabled(false);
 				c = new GridBagConstraints();
