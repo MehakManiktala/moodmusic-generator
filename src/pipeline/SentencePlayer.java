@@ -262,7 +262,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				controlPanel.setLayout(new GridBagLayout());
 				mainFrame.add(controlPanel);
 				player.textArea.setEditable(false);
-				player.textArea.setFont(new Font("Serif", Font.ITALIC, 16));
+				player.textArea.setFont(new Font("Serif", Font.ITALIC, 32));
 				player.textArea.setLineWrap(true);
 				player.textArea.setWrapStyleWord(true);
 				{
