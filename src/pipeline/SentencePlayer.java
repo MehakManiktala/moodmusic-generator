@@ -91,7 +91,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			}
 		}
 		
-		public MoodSentence(String st, Mood mood, int start, int end, int moodStart, int moodEnd) {
+		public MoodSentence(String st, Mood mood, String moodPiece, int start, int end, int moodStart, int moodEnd) {
 
 			this.sentence = st;
 			this.mood = mood;
@@ -99,10 +99,12 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			this.moodStartIndex = moodStart;
 			this.moodEndIndex = moodEnd;
 			this.endIndex = end;
+			this.moodPiece = moodPiece;
 		}
 
 		public String sentence = "";
 		public Mood mood = Mood.Calm;
+		public String moodPiece ="";
 		public int startIndex = -1;
 		public int endIndex = -1;
 		public int moodStartIndex =-1;
@@ -113,7 +115,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		this.textArea.setText("");
 		for (MoodSentence s : this.sentenceBuffer) {
 			if (this.showMoodCB.isSelected()) {
-				this.textArea.append("["+s.mood.name()+"] ");
+				this.textArea.append(s.moodPiece);
 			}
 			this.textArea.append(s.sentence);
 		}
@@ -209,8 +211,8 @@ public class SentencePlayer extends javax.swing.JFrame  {
 										ex.printStackTrace();
 									}
 									System.out.println(mood.color);
-									String moodPiece = "["+mood.name()+"] ";
-									player.sentenceBuffer.add(new MoodSentence(sentence, mood, previous_index, previous_index+sentence.length()-1, previous_moodIndex, previous_moodIndex + sentence.length()+ moodPiece.length() ));
+									String moodPiece = "";
+									player.sentenceBuffer.add(new MoodSentence(sentence, mood, moodPiece, previous_index, previous_index+sentence.length()-1, previous_moodIndex, previous_moodIndex + sentence.length()+ moodPiece.length() ));
 									previous_index += sentence.length();
 									previous_moodIndex += sentence.length() + moodPiece.length();
 
