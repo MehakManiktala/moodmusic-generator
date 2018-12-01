@@ -48,7 +48,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	MusicGenerator musicGen = new MusicGenerator();
 
 	//UI Components
-	private JTextArea textArea = new JTextArea(10, 32);;
+	private JTextArea textArea = new JTextArea(15, 45);;
 	private JTextArea currentMood = new JTextArea(1,10);
 	private JCheckBox showMoodCB;
 	private JButton clear;
@@ -243,8 +243,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		new SwingWorker<Void, String>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				JFrame mainFrame = new JFrame("Java SWING Examples");
-				mainFrame.setSize(800,640);
+				JFrame mainFrame = new JFrame();
 				JPanel controlPanel = new JPanel(new GridBagLayout());
 				controlPanel.setLayout(new GridBagLayout());
 				mainFrame.add(controlPanel);
@@ -275,7 +274,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 				
 				c = new GridBagConstraints();
                 c.fill = GridBagConstraints.HORIZONTAL;
-                c.gridx = 2;
+                c.gridx = 1;
                 c.gridy = 0;
 				player.currentMood.setFont(new Font("Serif", Font.BOLD, 32));
 				player.currentMood.setEditable(false);
@@ -298,7 +297,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
                 c.fill = GridBagConstraints.HORIZONTAL;
                 c.gridx = 1;
                 c.gridy = 0;
-				controlPanel.add(player.clear, c);
+				//controlPanel.add(player.clear, c);
 				player.clear.addActionListener(new java.awt.event.ActionListener() {
 		            public void actionPerformed(java.awt.event.ActionEvent evt) {
 		            	player.clear();
