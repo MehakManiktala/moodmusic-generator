@@ -117,23 +117,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			}
 			this.textArea.append(s.sentence);
 		}
-		for (MoodSentence s : this.sentenceBuffer) {
-			if (this.showMoodCB.isSelected()) {
-				if (s.mood.color == null) {
-					System.out.println("NULL COLOR");
-				}
-				highlighter = textArea.getHighlighter();
-				painter = new DefaultHighlighter.DefaultHighlightPainter(s.mood.color);
-				try {
-					System.out.println(s.moodStartIndex+", "+ s.moodEndIndex+", ");
-					System.out.println(s.mood.color);
-					this.highlighter.addHighlight(s.moodStartIndex, s.moodEndIndex, painter);
-				} catch (BadLocationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
+		
 	}
 
 	private void initComponents(String sentenceDir) {
@@ -369,8 +353,14 @@ public class SentencePlayer extends javax.swing.JFrame  {
 						}
 						player.displaySentences();
 						player.highlighter.removeAllHighlights();
-						HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(null);
-						player.highlighter.addHighlight(next.startIndex, next.endIndex, p );
+						if (player.showMoodCB.isSelected()) {
+							HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(next.mood.color);
+							player.highlighter.addHighlight(next.moodStartIndex, next.moodEndIndex, p );
+						}
+						else {
+							HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(null);
+							player.highlighter.addHighlight(next.startIndex, next.endIndex, p );
+						}
 					} catch (BadLocationException e) {
 						e.printStackTrace();
 					}
