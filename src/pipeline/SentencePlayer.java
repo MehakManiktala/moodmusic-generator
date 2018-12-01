@@ -306,93 +306,90 @@ public class SentencePlayer extends javax.swing.JFrame  {
 		}.execute();
 		
 		//Music player thread
-		int pace_duration = 5;
+		int pace_duration = 1;
 		new SwingWorker<Void, String>(){
 			@Override
 			protected Void doInBackground() throws Exception {
 				int next_index = 0;
+				@SuppressWarnings("unused")
+				double multiplier = 12;
 				List<MoodSentence> sentenceBuffer = player.sentenceBuffer;
 				
 				//default starting mood
 				player.musicGen.Emotion.setPleasantness();
 				
 				while (player.terminationSwitch==false) {
-					
-					//if set of sentences currently play has been replaced, switch to playing from that new set
-					if (sentenceBuffer!=player.sentenceBuffer) {
-						next_index = 0;
-						sentenceBuffer = player.sentenceBuffer;
+					try {					
+						
+						//if set of sentences currently play has been replaced, switch to playing from that new set
+						if (sentenceBuffer!=player.sentenceBuffer) {
+							next_index = 0;
+							sentenceBuffer = player.sentenceBuffer;
+						}
+						
+		            	player.musicGen.scr.empty();
+		            	player.musicGen.Generate((int)( 24));
+		                Play.midi(player.musicGen.scr);
+		            	while(Play.cycleIsPlaying()) {
+					        Play.waitCycle(player.musicGen.scr,
+					                0);
+		            	}
+		                
+						while (next_index >= player.sentenceBuffer.size()) {
+							Thread.sleep(pace_duration);
+						}
+						MoodSentence next = player.sentenceBuffer.get(next_index);
+						multiplier = next.mood.multiplier;
+						System.out.print(next.sentence);
+						System.out.print(next.mood.name());
+						System.out.println(next.startIndex +", "+next.endIndex);
+						try {
+							if (player.showMoodCB.isSelected()) {
+								player.currentMood.setText(next.mood.name());
+							}
+							else {
+								player.currentMood.setText("");
+							}
+							player.displaySentences();
+							player.highlighter.removeAllHighlights();
+							if (player.showMoodCB.isSelected()) {
+								HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(next.mood.color);
+								player.highlighter.addHighlight(next.moodStartIndex, next.moodEndIndex, p );
+							}
+							else {
+								HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(null);
+								player.highlighter.addHighlight(next.startIndex, next.endIndex, p );
+							}
+						} catch (BadLocationException e) {
+							e.printStackTrace();
+						}
+						next_index++;
+						EmotionHandler emotion = player.musicGen.Emotion;
+						switch(next.mood) {
+						case Happy:
+							emotion.setPleasantness();
+							break;
+						case Surprised:
+							emotion.setStrongEngagement();
+							break;
+						case Sad:
+							emotion.setUnpleasantness();
+							break;
+						case Fear:
+					        emotion.setHighNegativeAffect();
+					        break;
+						case Angry:
+							emotion.setAngryMusic();
+						default:
+							System.out.println("Unrecognized mood "+next.mood.name());
+							break;
+						}
+					}catch(Exception ex) {
+						ex.printStackTrace();
 					}
 					
-	            	player.musicGen.scr.empty();
-	            	player.musicGen.Generate(24);
-	                Play.midi(player.musicGen.scr);
-	            	while(Play.cycleIsPlaying()) {
-				        Play.waitCycle(player.musicGen.scr,
-				                0);
-	            	}
-	                
-					while (next_index >= player.sentenceBuffer.size()) {
-						Thread.sleep(pace_duration);
-					}
-					MoodSentence next = player.sentenceBuffer.get(next_index);
-					System.out.print(next.sentence);
-					System.out.print(next.mood.name());
-					System.out.println(next.startIndex +", "+next.endIndex);
-					try {
-						if (player.showMoodCB.isSelected()) {
-							player.currentMood.setText(next.mood.name());
-						}
-						else {
-							player.currentMood.setText("");
-						}
-						player.displaySentences();
-						player.highlighter.removeAllHighlights();
-						if (player.showMoodCB.isSelected()) {
-							HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(next.mood.color);
-							player.highlighter.addHighlight(next.moodStartIndex, next.moodEndIndex, p );
-						}
-						else {
-							HighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(null);
-							player.highlighter.addHighlight(next.startIndex, next.endIndex, p );
-						}
-					} catch (BadLocationException e) {
-						e.printStackTrace();
-					}
-					next_index++;
-					EmotionHandler emotion = player.musicGen.Emotion;
-					switch(next.mood) {
-					case Happy:
-						emotion.setPleasantness();
-						break;
-					case Calm:
-						emotion.setLowNegativeAffect();
-						break;
-					case Active:
-						emotion.setHighPositiveAffect();
-						break;
-					case Quiescent:
-						emotion.setDisengagement();
-						break;
-					case Surprised:
-						emotion.setStrongEngagement();
-						break;
-					case Drowsy:
-				        emotion.setLowPositiveAffect();
-				        break;
-					case Sad:
-						emotion.setUnpleasantness();
-						break;
-					case Fear:
-				        emotion.setHighNegativeAffect();
-				        break;
-					case Angry:
-						emotion.setAngryMusic();
-					default:
-						System.out.println("Unrecognized mood "+next.mood.name());
-						break;
-					}
 				}
+
 				
 
 				
