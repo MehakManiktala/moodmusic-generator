@@ -48,7 +48,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 	MusicGenerator musicGen = new MusicGenerator();
 
 	//UI Components
-	private JTextArea textArea;
+	private JTextArea textArea = new JTextArea(10, 32);;
 	private JTextArea currentMood = new JTextArea(1,10);
 	private JCheckBox showMoodCB;
 	private JButton clear;
@@ -138,7 +138,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 
 	private void initComponents(String sentenceDir) {
 
-		textArea = new JTextArea(20, 64);
 
 		String text = "Waiting for sentences in "+sentenceDir;
 
@@ -179,8 +178,6 @@ public class SentencePlayer extends javax.swing.JFrame  {
 					Path dir = Paths.get(fpath);
 					WatchKey key = dir.register(watcher, ENTRY_CREATE);//, ENTRY_MODIFY);
 					System.out.println("Watching directory "+dir.toAbsolutePath().toString());
-					int previous_index = 0;//keep track of where sentences start and stop in the collective text
-					int previous_moodIndex = 0;
 					//put poller in new thread called mood-change reader
 					while(player.terminationSwitch==false){
 
@@ -205,6 +202,10 @@ public class SentencePlayer extends javax.swing.JFrame  {
 									has_found_files = true;
 									player.textArea.setText("");
 								}
+								
+								int previous_index = 0;//keep track of where sentences start and stop in the collective text
+								int previous_moodIndex = 0;
+								player.sentenceBuffer = new LinkedList<MoodSentence>();
 								
 								while ((st = br.readLine()) != null) {
 									if (st.equals(TERMINATION)) {
@@ -331,11 +332,18 @@ public class SentencePlayer extends javax.swing.JFrame  {
 			@Override
 			protected Void doInBackground() throws Exception {
 				int next_index = 0;
+				List<MoodSentence> sentenceBuffer = player.sentenceBuffer;
 				
 				//default starting mood
 				player.musicGen.Emotion.setPleasantness();
 				
 				while (player.terminationSwitch==false) {
+					
+					//if set of sentences currently play has been replaced, switch to playing from that new set
+					if (sentenceBuffer!=player.sentenceBuffer) {
+						next_index = 0;
+						sentenceBuffer = player.sentenceBuffer;
+					}
 					
 	            	player.musicGen.scr.empty();
 	            	player.musicGen.Generate(24);
