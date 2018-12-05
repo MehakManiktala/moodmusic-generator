@@ -2,5 +2,6 @@
 /nbproject/private/
 /dist/
 /bin/
-/Sentiment Analysis/data/
+/Sentiment Analysis/data/*
 *.moodsentence
+*.ipynb_checkpoints/*
