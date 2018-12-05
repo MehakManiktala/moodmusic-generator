@@ -242,7 +242,7 @@ public class SentencePlayer extends javax.swing.JFrame  {
 										//default starting mood
 										player.musicGen.Emotion.setPleasantness();
 										
-										while (next_index <= sentenceBuffer.size()) {
+										while (next_index < sentenceBuffer.size()) {
 											try {					
 												
 												//if set of sentences currently play has been replaced, switch to playing from that new set
@@ -251,17 +251,8 @@ public class SentencePlayer extends javax.swing.JFrame  {
 													sentenceBuffer = player.sentenceBuffer;
 												}
 												
-								            	player.musicGen.scr.empty();
-								            	player.musicGen.Generate((int)( 24));
-								                Play.midi(player.musicGen.scr);
-								            	while(Play.cycleIsPlaying()) {
-											        Play.waitCycle(player.musicGen.scr,
-											                0);
-								            	}
+
 								                
-												while (next_index >= player.sentenceBuffer.size()) {
-													Thread.sleep(pace_duration);
-												}
 												MoodSentence next = player.sentenceBuffer.get(next_index);
 												multiplier = next.mood.multiplier;
 												System.out.print(next.sentence);
@@ -307,6 +298,13 @@ public class SentencePlayer extends javax.swing.JFrame  {
 													System.out.println("Unrecognized mood "+next.mood.name());
 													break;
 												}
+								            	player.musicGen.scr.empty();
+								            	player.musicGen.Generate((int)( 24));
+								                Play.midi(player.musicGen.scr);
+								            	while(Play.cycleIsPlaying()) {
+											        Play.waitCycle(player.musicGen.scr,
+											                0);
+								            	}
 												next_index++;
 											}catch(Exception ex) {
 												ex.printStackTrace();
